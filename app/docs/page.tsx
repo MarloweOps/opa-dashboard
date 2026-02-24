@@ -28,14 +28,22 @@ export default async function DocsPage() {
 
   return (
     <main className="min-h-screen p-6 max-w-4xl mx-auto">
-      <div className="mb-8">
-        <Link href="/" className="mono text-[10px] text-sage hover:text-porcelain transition-colors">
-          ← BACK TO OPS
+      <div className="mb-8 flex items-start justify-between">
+        <div>
+          <Link href="/" className="mono text-[10px] text-sage hover:text-porcelain transition-colors">
+            ← BACK TO OPS
+          </Link>
+          <h1 className="serif text-2xl font-semibold text-porcelain mt-4">
+            The Varied<span className="text-terracotta">.</span>
+          </h1>
+          <p className="mono text-[11px] text-sage tracking-widest mt-1">DOCUMENTS</p>
+        </div>
+        <Link
+          href="/inbox"
+          className="mono text-xs border border-forest/40 text-sage px-3 py-2 hover:border-forest hover:text-porcelain transition-colors mt-1"
+        >
+          + SEND TO MARLOWE
         </Link>
-        <h1 className="serif text-2xl font-semibold text-porcelain mt-4">
-          The Varied<span className="text-terracotta">.</span>
-        </h1>
-        <p className="mono text-[11px] text-sage tracking-widest mt-1">DOCUMENTS</p>
       </div>
 
       {docs.length === 0 && (

@@ -280,6 +280,7 @@ export default async function Dashboard() {
         <p className="mono text-[10px] text-sage/50">THE VARIED · Brendan Lynch + Marlowe · ops@useopa.com</p>
         <div className="flex gap-4">
           <a href="/docs" className="mono text-[10px] text-sage/50 hover:text-sage transition-colors">docs →</a>
+          <a href="/inbox" className="mono text-[10px] text-sage/50 hover:text-sage transition-colors">inbox →</a>
           <a href="/api/refresh" className="mono text-[10px] text-sage/50 hover:text-sage transition-colors">refresh</a>
         </div>
       </footer>
