@@ -1,4 +1,5 @@
 import { getStatus, StatusData, RoadmapItem } from "@/lib/data";
+export const dynamic = 'force-dynamic';
 
 function fmt(n: number) {
   return n.toLocaleString("en-US");
@@ -277,7 +278,10 @@ export default async function Dashboard() {
       {/* Footer */}
       <footer className="mt-8 flex items-center justify-between">
         <p className="mono text-[10px] text-sage/50">THE VARIED · Brendan Lynch + Marlowe · ops@useopa.com</p>
-        <p className="mono text-[10px] text-sage/50">Revalidates every hour · <a href="/api/refresh" className="hover:text-sage transition-colors">force refresh</a></p>
+        <div className="flex gap-4">
+          <a href="/docs" className="mono text-[10px] text-sage/50 hover:text-sage transition-colors">docs →</a>
+          <a href="/api/refresh" className="mono text-[10px] text-sage/50 hover:text-sage transition-colors">refresh</a>
+        </div>
       </footer>
 
     </main>
