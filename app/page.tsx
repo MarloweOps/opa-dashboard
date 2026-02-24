@@ -85,9 +85,9 @@ export default async function Dashboard() {
       <header className="mb-8 flex items-start justify-between">
         <div>
           <h1 className="serif text-3xl font-semibold text-porcelain tracking-tight">
-            <span className="text-forest-light">M</span>arlowe<span className="text-terracotta">.</span>
+            The Varied<span className="text-terracotta">.</span>
           </h1>
-          <p className="mono text-[11px] text-sage tracking-widest mt-1">FOUNDER OPS DASHBOARD</p>
+          <p className="mono text-[11px] text-sage tracking-widest mt-1">MARLOWE OPS · BRENDAN + MARLOWE</p>
         </div>
         <div className="text-right">
           <div className="flex items-center gap-2 justify-end">
@@ -276,7 +276,7 @@ export default async function Dashboard() {
 
       {/* Footer */}
       <footer className="mt-8 flex items-center justify-between">
-        <p className="mono text-[10px] text-sage/50">MARLOWE v1 · ops@useopa.com · MarloweOps</p>
+        <p className="mono text-[10px] text-sage/50">THE VARIED · Brendan Lynch + Marlowe · ops@useopa.com</p>
         <p className="mono text-[10px] text-sage/50">Revalidates every hour · <a href="/api/refresh" className="hover:text-sage transition-colors">force refresh</a></p>
       </footer>
 
