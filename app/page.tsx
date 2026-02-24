@@ -280,7 +280,7 @@ export default async function Dashboard() {
         <Panel title="▸ Downloads">
           <div className="flex flex-wrap gap-4">
             <a
-              href="/downloads/OPA-Production-Master-v1.2.xlsx"
+              href="/downloads/OPA-Production-Master-v1.3.xlsx"
               download
               className="flex items-center gap-3 px-4 py-3 bg-forest/20 border border-sage/20 rounded-sm hover:border-sage/50 hover:bg-forest/30 transition-all group"
             >
@@ -289,7 +289,7 @@ export default async function Dashboard() {
                   OPA Production Master v1.2
                 </span>
                 <span className="mono text-[10px] text-sage mt-0.5">
-                  12-sheet commercial production operating system · .xlsx · 40 KB
+                  13-sheet commercial production operating system · .xlsx · 47 KB
                 </span>
               </div>
               <span className="mono text-[10px] text-sage/60 group-hover:text-sage transition-colors ml-2">↓</span>
