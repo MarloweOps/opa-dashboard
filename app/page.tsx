@@ -275,6 +275,29 @@ export default async function Dashboard() {
 
       </div>
 
+      {/* Downloads */}
+      <div className="mt-4">
+        <Panel title="▸ Downloads">
+          <div className="flex flex-wrap gap-4">
+            <a
+              href="/downloads/OPA-Production-Master-v1.0.xlsx"
+              download
+              className="flex items-center gap-3 px-4 py-3 bg-forest/20 border border-sage/20 rounded-sm hover:border-sage/50 hover:bg-forest/30 transition-all group"
+            >
+              <div className="flex flex-col">
+                <span className="mono text-[11px] font-bold text-porcelain group-hover:text-[#4ade80] transition-colors">
+                  OPA Production Master v1.0
+                </span>
+                <span className="mono text-[10px] text-sage mt-0.5">
+                  16-sheet commercial production operating system · .xlsx · 48 KB
+                </span>
+              </div>
+              <span className="mono text-[10px] text-sage/60 group-hover:text-sage transition-colors ml-2">↓</span>
+            </a>
+          </div>
+        </Panel>
+      </div>
+
       {/* Footer */}
       <footer className="mt-8 flex items-center justify-between">
         <p className="mono text-[10px] text-sage/50">THE VARIED · Brendan Lynch + Marlowe · ops@useopa.com</p>
