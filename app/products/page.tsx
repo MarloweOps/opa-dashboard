@@ -3,6 +3,7 @@ import { getStatus } from "@/lib/data";
 export const dynamic = "force-dynamic";
 
 const DOWNLOADS = [
+  { label: "Acid Media — Brand Positioning Doc", file: "/downloads/Acid-Media-Brand-Positioning.md", size: "15 KB", tag: "NEW" },
   { label: "OPA Production Master v1.4", file: "/downloads/OPA-Production-Master-v1.4.xlsx", size: "47 KB" },
   { label: "OPA Production Master v1.3", file: "/downloads/OPA-Production-Master-v1.3.xlsx", size: "47 KB" },
   { label: "OPA Production Master v1.2", file: "/downloads/OPA-Production-Master-v1.2.xlsx", size: "46 KB" },
@@ -44,8 +45,8 @@ export default async function ProductsPage() {
         <h2 className="section-title">Downloads</h2>
         {DOWNLOADS.map((item) => (
           <a key={item.file} href={item.file} download className="card !p-3.5 hover:bg-[var(--bg-elevated)]">
-            <p className="text-[14px] text-[var(--text-primary)]">{item.label}</p>
-            <p className="data text-[11px] text-[var(--text-secondary)] mt-1">.xlsx - {item.size}</p>
+            <p className="text-[14px] text-[var(--text-primary)]">{item.label}{item.tag && <span className="ml-2 text-[10px] text-[var(--green)] font-mono">{item.tag}</span>}</p>
+            <p className="data text-[11px] text-[var(--text-secondary)] mt-1">{item.file.endsWith('.md') ? '.md' : '.xlsx'} — {item.size}</p>
           </a>
         ))}
       </aside>
