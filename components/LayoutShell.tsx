@@ -6,11 +6,11 @@ import TopBar from "@/components/TopBar";
 
 const TITLES: Record<string, string> = {
   "/": "Overview",
-  "/command": "Marlowe Command Center",
-  "/today": "Today",
-  "/briefs": "Morning Brief Archive",
-  "/outreach": "Coordinator Outreach Tracker",
-  "/products": "Products & Downloads",
+  "/command": "The Office",
+  "/today": "Today's Focus",
+  "/briefs": "Brief Archive",
+  "/outreach": "Outreach Tracker",
+  "/products": "Products",
   "/crons": "Automations",
   "/docs": "Docs",
   "/inbox": "Inbox",
@@ -35,7 +35,7 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
     <div>
       <Sidebar pathname={pathname} />
       <TopBar title={getPageTitle(pathname)} />
-      <main className="ml-[220px] pt-[60px] min-h-screen">{children}</main>
+      <main className="ml-[240px] pt-[56px] min-h-screen">{children}</main>
     </div>
   );
 }

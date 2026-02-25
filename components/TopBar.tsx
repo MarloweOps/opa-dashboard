@@ -1,19 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { Search } from "@/components/icons";
 
 function fmtCurrency(value: number) {
   return `$${value.toLocaleString("en-US")}`;
 }
 
 export default function TopBar({ title }: { title: string }) {
-  const [now, setNow] = useState(() => new Date());
   const [mrr, setMrr] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     let active = true;
@@ -36,26 +31,27 @@ export default function TopBar({ title }: { title: string }) {
     };
   }, []);
 
-  const clock = useMemo(
-    () =>
-      now.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      }),
-    [now]
-  );
-
   return (
-    <header className="fixed left-[220px] right-0 top-0 h-[60px] bg-[rgba(6,13,5,0.95)] backdrop-blur border-b border-[rgba(131,151,136,0.15)] z-30 px-6 flex items-center justify-between">
-      <div className="mono text-[12px] text-porcelain tracking-wider uppercase">{title}</div>
-      <div className="mono text-[12px] text-[#4ade80] tracking-wider">MRR {fmtCurrency(mrr)}</div>
-      <div className="flex items-center gap-3">
+    <header className="fixed left-[240px] right-0 top-0 h-[56px] z-30 border-b border-[var(--border)] bg-[var(--bg-surface)]/95 backdrop-blur px-6 flex items-center justify-between">
+      <h1 className="text-[16px] font-semibold text-[var(--text-primary)]">{title}</h1>
+
+      <div className="pill-green data text-[11px]">{fmtCurrency(mrr)} MRR</div>
+
+      <div className="flex items-center gap-4">
+        <button type="button" className="btn !py-1.5 !px-2.5 inline-flex items-center gap-2 text-[12px] text-[var(--text-secondary)]">
+          <Search size={14} />
+          <span className="text-[var(--text-primary)]">Search</span>
+          <span className="data text-[10px] rounded-md border border-[var(--border)] px-1.5 py-0.5">⌘K</span>
+        </button>
+
+        <span className="h-5 w-px bg-[var(--border)]" />
+
         <div className="flex items-center gap-2">
-          <span className="w-6 h-6 rounded-full border border-sage/40 bg-forest/30 flex items-center justify-center mono text-[10px] text-porcelain">B</span>
-          <span className="w-6 h-6 rounded-full border border-sage/40 bg-forest/30 flex items-center justify-center mono text-[10px] text-porcelain">M</span>
+          <span className="h-7 w-7 rounded-full bg-[#4f46e5] text-white text-[11px] font-semibold flex items-center justify-center">B</span>
+          <span className="h-7 w-7 rounded-full bg-[#16a34a] text-white text-[11px] font-semibold flex items-center justify-center">M</span>
         </div>
-        <span className="mono text-[11px] text-sage">{clock}</span>
+
+        <span className="status-dot live pulse" />
       </div>
     </header>
   );

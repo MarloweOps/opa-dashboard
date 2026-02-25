@@ -16,10 +16,10 @@ type Task = {
 
 const TABS: Array<Task["status"]> = ["queued", "active", "blocked", "done"];
 
-function priorityDot(priority: Task["priority"]) {
-  if (priority === "high") return "bg-terracotta";
-  if (priority === "med") return "bg-honey";
-  return "bg-sage";
+function priorityPill(priority: Task["priority"]) {
+  if (priority === "high") return "pill-red";
+  if (priority === "med") return "pill-amber";
+  return "pill-gray";
 }
 
 export default function TaskBoard({ tasks, onCreated }: { tasks: Task[]; onCreated: (task: Task) => void }) {
@@ -48,104 +48,81 @@ export default function TaskBoard({ tasks, onCreated }: { tasks: Task[]; onCreat
   };
 
   return (
-    <div className="panel">
-      <div className="panel-header flex items-center justify-between">
-        <span>◈ Marlowe Tasks</span>
-        <button
-          type="button"
-          onClick={() => setAdding((prev) => !prev)}
-          className="mono text-[10px] text-sage hover:text-porcelain transition-colors"
-        >
-          + ADD TASK
+    <section className="card !p-0">
+      <div className="px-5 pt-5 flex items-center justify-between">
+        <h3 className="section-title">Tasks</h3>
+        <button type="button" onClick={() => setAdding((prev) => !prev)} className="btn !py-1 !px-2 text-[12px]">
+          + Add Task
         </button>
       </div>
 
-      <div className="px-4 pt-3 border-b border-sage/15 flex gap-4">
+      <div className="px-5 mt-4 border-b border-[var(--border)] flex gap-4">
         {TABS.map((item) => (
           <button
             key={item}
             type="button"
             onClick={() => setTab(item)}
-            className={`mono text-[10px] uppercase pb-2 border-b-2 tracking-wider transition-colors ${
-              tab === item ? "text-porcelain border-forest-light" : "text-sage border-transparent"
-            }`}
+            className={[
+              "pb-3 text-[12px] capitalize border-b-2 transition-colors",
+              tab === item
+                ? "text-[var(--text-primary)] border-[var(--green)]"
+                : "text-[var(--text-secondary)] border-transparent",
+            ].join(" ")}
           >
             {item}
           </button>
         ))}
       </div>
 
-      <div className="p-4 space-y-3">
+      <div className="p-5 space-y-3">
         {adding && (
-          <div className="border border-sage/20 bg-forest/10 p-3 space-y-2">
-            <input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Task title"
-              className="w-full bg-black/20 border border-sage/20 px-2 py-1.5 text-[12px] text-porcelain mono focus:outline-none focus:border-sage/40"
-            />
-            <div className="grid grid-cols-2 gap-2">
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="bg-black/20 border border-sage/20 px-2 py-1.5 text-[11px] text-sage mono"
-              >
+          <div className="card !p-3.5">
+            <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Task title" className="input" />
+            <div className="grid grid-cols-2 gap-2 mt-2">
+              <select value={category} onChange={(e) => setCategory(e.target.value)} className="select">
                 <option>OPA</option>
                 <option>TEMPLATE</option>
                 <option>EMAIL</option>
                 <option>INFRA</option>
                 <option>CONTENT</option>
               </select>
-              <select
-                value={priority}
-                onChange={(e) => setPriority(e.target.value as Task["priority"])}
-                className="bg-black/20 border border-sage/20 px-2 py-1.5 text-[11px] text-sage mono"
-              >
+              <select value={priority} onChange={(e) => setPriority(e.target.value as Task["priority"])} className="select">
                 <option value="high">high</option>
                 <option value="med">med</option>
                 <option value="low">low</option>
               </select>
             </div>
-            <button
-              type="button"
-              onClick={addTask}
-              className="mono text-[10px] px-2 py-1 border border-forest text-[#4ade80] bg-forest/15"
-            >
-              SAVE
+            <button type="button" onClick={addTask} className="btn btn-green mt-2 text-[12px]">
+              Save
             </button>
           </div>
         )}
 
-        {visible.length === 0 && <p className="text-[12px] text-sage italic">No tasks in this column.</p>}
+        {visible.length === 0 && (
+          <div className="empty-state !min-h-[120px]">
+            <p className="text-[14px] text-[var(--text-primary)]">No tasks in this column</p>
+          </div>
+        )}
 
         {visible.map((task) => (
-          <article key={task.id} className="border border-sage/20 bg-forest/10 px-3 py-2">
+          <article key={task.id} className="card !p-3.5">
             <div className="flex items-start justify-between gap-2">
-              <h4 className="text-[12px] text-porcelain font-medium leading-snug">{task.title}</h4>
-              <span className="mono text-[9px] px-1.5 py-0.5 border border-sage/30 rounded text-sage">{task.category || "GEN"}</span>
+              <h4 className="text-[14px] font-medium leading-snug">{task.title}</h4>
+              <span className={`${priorityPill(task.priority)} data text-[10px] uppercase`}>{task.priority}</span>
             </div>
 
-            <div className="flex items-center gap-2 mt-2">
-              <span className={`w-2 h-2 rounded-full ${priorityDot(task.priority)}`} />
-              <span className="mono text-[9px] text-sage uppercase">{task.priority}</span>
+            <div className="mt-2 flex items-center justify-between">
+              <span className="pill-gray data text-[10px] uppercase">{task.category || "GEN"}</span>
+              <span className="data text-[10px] text-[var(--text-secondary)]">
+                {new Date(task.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+              </span>
             </div>
 
-            {task.description && <p className="text-[11px] text-sage-light mt-2 line-clamp-2">{task.description}</p>}
-            {task.status === "blocked" && task.blocker && (
-              <p className="text-[11px] text-terracotta mt-2">{task.blocker}</p>
-            )}
-
-            <p className="mono text-[9px] text-sage mt-2">
-              {new Date(task.created_at).toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </p>
+            {task.description && <p className="text-[12px] text-[var(--text-secondary)] mt-2 line-clamp-2">{task.description}</p>}
+            {task.status === "blocked" && task.blocker && <p className="text-[12px] text-[var(--red)] mt-2">{task.blocker}</p>}
           </article>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

@@ -2,17 +2,28 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import {
+  LayoutDashboard,
+  Bot,
+  CheckSquare,
+  Newspaper,
+  Users,
+  Package,
+  Timer,
+  FileText,
+  Inbox,
+} from "@/components/icons";
 
 const NAV_ITEMS = [
-  { href: "/", label: "▸ Overview" },
-  { href: "/command", label: "⬡ Marlowe" },
-  { href: "/today", label: "◈ Today" },
-  { href: "/briefs", label: "◷ Briefs" },
-  { href: "/outreach", label: "◎ Outreach" },
-  { href: "/products", label: "↓ Products" },
-  { href: "/crons", label: "⟳ Automations" },
-  { href: "/docs", label: "≡ Docs" },
-  { href: "/inbox", label: "↑ Inbox" },
+  { href: "/", label: "Overview", Icon: LayoutDashboard },
+  { href: "/command", label: "Command", Icon: Bot },
+  { href: "/today", label: "Today", Icon: CheckSquare },
+  { href: "/briefs", label: "Briefs", Icon: Newspaper },
+  { href: "/outreach", label: "Outreach", Icon: Users },
+  { href: "/products", label: "Products", Icon: Package },
+  { href: "/crons", label: "Automations", Icon: Timer },
+  { href: "/docs", label: "Docs", Icon: FileText },
+  { href: "/inbox", label: "Inbox", Icon: Inbox },
 ];
 
 function isActivePath(pathname: string, href: string) {
@@ -63,47 +74,76 @@ export default function Sidebar({ pathname }: { pathname: string }) {
   );
 
   return (
-    <aside className="fixed left-0 top-0 bottom-0 w-[220px] border-r border-sage/15 bg-[#060d05] z-40 flex flex-col">
-      <div className="px-5 pt-6 pb-4 border-b border-sage/15">
-        <div className="serif text-xl text-porcelain tracking-tight leading-none">
-          THE VARIED<span className="text-terracotta">.</span>
+    <aside className="fixed left-0 top-0 bottom-0 w-[240px] z-40 flex flex-col bg-[var(--bg-base)] border-r border-[var(--border)]">
+      <div className="px-6 pt-6 pb-5 border-b border-[var(--border)]">
+        <div className="serif text-[26px] leading-none tracking-tight text-[var(--text-primary)]">
+          THE VARIED<span className="text-[var(--terracotta)]">.</span>
         </div>
-        <div className="mono text-[9px] text-sage tracking-[0.2em] mt-2">MISSION CONTROL</div>
+        <div className="data text-[9px] uppercase tracking-[0.18em] mt-2 text-[var(--text-dim)]">Mission Control</div>
       </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-1">
-        {NAV_ITEMS.map((item) => {
+      <nav className="px-3 py-4 space-y-1">
+        {NAV_ITEMS.slice(0, 7).map((item) => {
           const active = isActivePath(pathname, item.href);
-          const isCommand = item.href === "/command";
           return (
-            <Link
+            <NavItem
               key={item.href}
               href={item.href}
-              className={[
-                "mono text-[11px] tracking-wider px-3 py-2 flex items-center justify-between transition-all border-l-2",
-                active
-                  ? "text-porcelain bg-forest/20 border-l-forest-light"
-                  : "text-sage border-l-transparent hover:bg-forest/10 hover:text-porcelain",
-              ].join(" ")}
-            >
-              <span>{item.label}</span>
-              {isCommand && pendingApprovals > 0 && (
-                <span className="mono text-[9px] px-1.5 py-0.5 rounded-sm bg-terracotta/20 text-terracotta border border-terracotta/25">
-                  {pendingApprovals}
-                </span>
-              )}
-            </Link>
+              label={item.label}
+              icon={<item.Icon size={16} />}
+              active={active}
+              badge={item.href === "/command" ? pendingApprovals : 0}
+            />
           );
         })}
       </nav>
 
-      <div className="px-5 py-4 border-t border-sage/15">
+      <div className="mx-6 my-2 border-t border-[var(--border)]" />
+
+      <nav className="px-3 py-2 space-y-1">
+        {NAV_ITEMS.slice(7).map((item) => {
+          const active = isActivePath(pathname, item.href);
+          return <NavItem key={item.href} href={item.href} label={item.label} icon={<item.Icon size={16} />} active={active} />;
+        })}
+      </nav>
+
+      <div className="mt-auto px-6 py-5 border-t border-[var(--border)]">
         <div className="flex items-center gap-2">
           <span className="status-dot live pulse" />
-          <span className="mono text-[10px] text-sage tracking-wider">SYSTEM ONLINE</span>
+          <span className="data text-[10px] uppercase tracking-[0.14em] text-[var(--text-secondary)]">Online</span>
+          <span className="data text-[11px] text-[var(--text-primary)] ml-auto">{clock}</span>
         </div>
-        <div className="mono text-[10px] text-porcelain mt-2">{clock}</div>
       </div>
     </aside>
+  );
+}
+
+function NavItem({
+  href,
+  label,
+  icon,
+  active,
+  badge,
+}: {
+  href: string;
+  label: string;
+  icon: React.ReactNode;
+  active: boolean;
+  badge?: number;
+}) {
+  return (
+    <Link
+      href={href}
+      className={[
+        "flex items-center gap-3 rounded-r-xl rounded-l-md px-3 py-2.5 text-[14px] transition-colors border-l-2",
+        active
+          ? "bg-[var(--bg-elevated)] border-l-[var(--green)] text-[var(--text-primary)]"
+          : "border-l-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]",
+      ].join(" ")}
+    >
+      <span className="shrink-0">{icon}</span>
+      <span>{label}</span>
+      {!!badge && <span className="pill-amber data !py-0.5 !px-2 ml-auto text-[10px]">{badge}</span>}
+    </Link>
   );
 }

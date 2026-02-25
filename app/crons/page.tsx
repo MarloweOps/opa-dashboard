@@ -41,63 +41,62 @@ export default function CronsPage() {
 
   return (
     <div className="p-6">
-      <div className="panel">
-        <div className="panel-header">⟳ Automations</div>
-        <div className="p-4 space-y-3">
-          {jobs.map((job) => (
-            <article key={job.id} className="border border-sage/20 bg-forest/10 p-3">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="mono text-[11px] text-porcelain">{job.name}</p>
-                  <p className="mono text-[10px] text-sage mt-1">{job.schedule}</p>
-                </div>
-                <span className={`mono text-[10px] px-2 py-0.5 border rounded ${job.status === "healthy" ? "text-[#4ade80] border-[#4ade80]/30 bg-[#4ade80]/10" : "text-honey border-honey/30 bg-honey/10"}`}>
-                  {job.status.toUpperCase()}
-                </span>
+      <section className="card space-y-3">
+        <h2 className="section-title">Automations</h2>
+
+        {jobs.map((job) => (
+          <article key={job.id} className="card !p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h3 className="text-[15px]">{job.name}</h3>
+                <p className="data text-[11px] text-[var(--text-secondary)] mt-1">{job.schedule}</p>
               </div>
+              <span className={job.status === "healthy" ? "pill-green" : "pill-amber"}>{job.status}</span>
+            </div>
 
-              <div className="grid grid-cols-2 gap-3 mt-3 mono text-[10px] text-sage">
-                <p>Last run: {job.lastRun}</p>
-                <p>Next run: {job.nextRun}</p>
-              </div>
+            <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 data text-[11px] text-[var(--text-secondary)]">
+              <p>Last run: {job.lastRun}</p>
+              <p>Next run: {job.nextRun}</p>
+            </div>
 
-              <p className="text-[12px] text-sage-light mt-2">{job.output}</p>
+            <p className="text-[13px] mt-2">{job.output}</p>
 
-              <div className="mt-3 flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setJobs((prev) =>
-                      prev.map((item) =>
-                        item.id === job.id
-                          ? { ...item, lastRun: "Just now", output: `Manual run triggered at ${new Date().toLocaleTimeString("en-US")}.` }
-                          : item
-                      )
+            <div className="mt-3 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() =>
+                  setJobs((prev) =>
+                    prev.map((item) =>
+                      item.id === job.id
+                        ? {
+                            ...item,
+                            lastRun: "Just now",
+                            output: `Manual run triggered at ${new Date().toLocaleTimeString("en-US")}.`,
+                          }
+                        : item
                     )
-                  }
-                  className="mono text-[10px] px-3 py-1.5 border border-forest text-[#4ade80] bg-forest/10"
-                >
-                  RUN NOW
-                </button>
+                  )
+                }
+                className="btn btn-green"
+              >
+                Run Now
+              </button>
 
-                <label className="mono text-[10px] text-sage flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={job.enabled}
-                    onChange={(e) =>
-                      setJobs((prev) =>
-                        prev.map((item) => (item.id === job.id ? { ...item, enabled: e.target.checked } : item))
-                      )
-                    }
-                    className="accent-[#4ade80]"
-                  />
-                  ENABLED
-                </label>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
+              <label className="data text-[12px] text-[var(--text-secondary)] flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={job.enabled}
+                  onChange={(e) =>
+                    setJobs((prev) => prev.map((item) => (item.id === job.id ? { ...item, enabled: e.target.checked } : item)))
+                  }
+                  className="accent-[#4ade80]"
+                />
+                Enabled
+              </label>
+            </div>
+          </article>
+        ))}
+      </section>
     </div>
   );
 }

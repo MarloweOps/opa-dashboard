@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { FileText } from "@/components/icons";
 
 type Brief = {
   id: string;
@@ -38,48 +39,62 @@ export default function BriefsPage() {
   }, [briefs, query]);
 
   return (
-    <div className="p-6">
-      <div className="panel p-4 mb-4">
-        <label className="mono text-[10px] text-sage tracking-wider block mb-2">SEARCH BRIEFS</label>
+    <div className="p-6 space-y-4">
+      <section className="card">
+        <p className="section-title mb-2">Search Briefs</p>
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Filter by keyword"
-          className="w-full bg-black/20 border border-sage/20 px-3 py-2 mono text-[12px] text-porcelain focus:outline-none focus:border-sage/40"
+          className="input"
         />
-      </div>
+      </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {filtered.map((brief) => (
-          <button
-            key={brief.id}
-            type="button"
-            onClick={() => setSelected(brief)}
-            className="panel p-4 text-left hover:border-sage/40 transition"
-          >
-            <p className="mono text-[10px] text-sage tracking-wider">{new Date(brief.brief_date).toLocaleDateString("en-US")}</p>
-            <p className="text-[12px] text-porcelain mt-2">{brief.weather_line || "No weather note"}</p>
-            <p className="mono text-[10px] text-honey mt-1">TOP PICK: {brief.top_pick || "n/a"}</p>
-            <p className="text-[12px] text-sage-light mt-3 line-clamp-3 leading-relaxed">{brief.content}</p>
+          <button key={brief.id} type="button" onClick={() => setSelected(brief)} className="card text-left hover:bg-[var(--bg-elevated)]">
+            <p className="data text-[11px] text-[var(--text-secondary)]">
+              {new Date(brief.brief_date).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </p>
+            <p className="text-[14px] text-[var(--text-primary)] mt-2">{brief.weather_line || "No weather note"}</p>
+            <p className="data text-[11px] text-[var(--text-secondary)] mt-2">{brief.top_pick || "PYPL · AMD · SOUN"}</p>
+            <div className="mt-5 flex items-center justify-between">
+              <div>
+                <p className="text-[12px] text-[var(--text-secondary)]">5 news items</p>
+                <p className="text-[12px] text-[var(--text-secondary)]">3 priority tasks</p>
+              </div>
+              <span className="btn !py-1.5 !px-2.5 text-[12px]">Read full brief</span>
+            </div>
           </button>
         ))}
-      </div>
+      </section>
 
       {selected && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-6" onClick={() => setSelected(null)}>
-          <div className="panel max-w-2xl w-full max-h-[80vh] overflow-y-auto p-5" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="mono text-[10px] text-sage tracking-wider">{new Date(selected.brief_date).toLocaleDateString("en-US")}</p>
-                <p className="text-[12px] text-porcelain mt-1">{selected.weather_line || "No weather note"}</p>
-                <p className="mono text-[10px] text-honey mt-1">TOP PICK: {selected.top_pick || "n/a"}</p>
+          <article className="card max-w-3xl w-full max-h-[84vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <FileText size={18} className="text-[var(--text-secondary)]" />
+                <h3 className="text-[18px]">Morning Brief</h3>
               </div>
-              <button type="button" onClick={() => setSelected(null)} className="mono text-[10px] text-sage hover:text-porcelain">
-                CLOSE
-              </button>
+              <button type="button" onClick={() => setSelected(null)} className="btn !py-1 !px-2 text-[12px]">Close</button>
             </div>
-            <pre className="mt-4 whitespace-pre-wrap text-[12px] leading-relaxed text-sage-light font-sans">{selected.content}</pre>
-          </div>
+            <p className="data text-[12px] text-[var(--text-secondary)] mt-2">
+              {new Date(selected.brief_date).toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </p>
+            <p className="text-[14px] text-[var(--text-primary)] mt-3">{selected.weather_line || "No weather note"}</p>
+            <pre className="mt-4 whitespace-pre-wrap text-[14px] leading-relaxed text-[var(--text-secondary)] font-sans">
+              {selected.content}
+            </pre>
+          </article>
         </div>
       )}
     </div>

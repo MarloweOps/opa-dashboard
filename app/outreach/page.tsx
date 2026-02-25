@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { ChevronDown, ExternalLink, Users } from "@/components/icons";
 
 type ContactStatus = "not_started" | "messaged" | "responded" | "call_booked" | "converted" | "passed";
 
@@ -15,26 +16,27 @@ type Contact = {
 };
 
 const STATUS_LABELS: Record<ContactStatus, string> = {
-  not_started: "NOT STARTED",
-  messaged: "MESSAGED",
-  responded: "RESPONDED",
-  call_booked: "CALL BOOKED",
-  converted: "CONVERTED",
-  passed: "PASSED",
+  not_started: "Not Started",
+  messaged: "Messaged",
+  responded: "Responded",
+  call_booked: "Call Booked",
+  converted: "Converted",
+  passed: "Passed",
 };
 
-const STATUS_COLORS: Record<ContactStatus, string> = {
-  not_started: "text-sage border-sage/30 bg-sage/10",
-  messaged: "text-honey border-honey/30 bg-honey/10",
-  responded: "text-[#4ade80] border-[#4ade80]/30 bg-[#4ade80]/10",
-  call_booked: "text-porcelain border-porcelain/30 bg-porcelain/10",
-  converted: "text-[#4ade80] border-[#4ade80]/40 bg-[#4ade80]/20",
-  passed: "text-terracotta border-terracotta/30 bg-terracotta/10",
+const STATUS_CLASSES: Record<ContactStatus, string> = {
+  not_started: "pill-gray",
+  messaged: "pill-amber",
+  responded: "pill-green",
+  call_booked: "pill-gray",
+  converted: "pill-green",
+  passed: "pill-red",
 };
 
 export default function OutreachPage() {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [filter, setFilter] = useState<"all" | ContactStatus>("all");
+  const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ name: "", company: "", platform: "LinkedIn", notes: "" });
 
   useEffect(() => {
@@ -53,10 +55,7 @@ export default function OutreachPage() {
     };
   }, []);
 
-  const visible = useMemo(
-    () => (filter === "all" ? contacts : contacts.filter((contact) => contact.status === filter)),
-    [contacts, filter]
-  );
+  const visible = useMemo(() => (filter === "all" ? contacts : contacts.filter((contact) => contact.status === filter)), [contacts, filter]);
 
   const addContact = async () => {
     if (!form.name.trim()) return;
@@ -74,128 +73,129 @@ export default function OutreachPage() {
     if (json.contact) {
       setContacts((prev) => [json.contact, ...prev]);
       setForm({ name: "", company: "", platform: "LinkedIn", notes: "" });
+      setShowModal(false);
     }
   };
 
   return (
-    <div className="p-6 space-y-4">
-      <div className="panel p-4">
-        <div className="flex items-end gap-2 flex-wrap">
-          <div>
-            <label className="mono text-[10px] text-sage tracking-wider block mb-1">NAME</label>
-            <input
-              value={form.name}
-              onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
-              className="bg-black/20 border border-sage/20 px-2 py-1.5 mono text-[12px] text-porcelain"
-            />
-          </div>
-          <div>
-            <label className="mono text-[10px] text-sage tracking-wider block mb-1">COMPANY</label>
-            <input
-              value={form.company}
-              onChange={(e) => setForm((prev) => ({ ...prev, company: e.target.value }))}
-              className="bg-black/20 border border-sage/20 px-2 py-1.5 mono text-[12px] text-porcelain"
-            />
-          </div>
-          <div>
-            <label className="mono text-[10px] text-sage tracking-wider block mb-1">PLATFORM</label>
-            <select
-              value={form.platform}
-              onChange={(e) => setForm((prev) => ({ ...prev, platform: e.target.value }))}
-              className="bg-black/20 border border-sage/20 px-2 py-1.5 mono text-[12px] text-sage"
-            >
-              <option>LinkedIn</option>
-              <option>Instagram</option>
-              <option>Email</option>
-              <option>Direct</option>
-            </select>
-          </div>
-          <div className="flex-1 min-w-[220px]">
-            <label className="mono text-[10px] text-sage tracking-wider block mb-1">NOTES</label>
-            <input
-              value={form.notes}
-              onChange={(e) => setForm((prev) => ({ ...prev, notes: e.target.value }))}
-              className="w-full bg-black/20 border border-sage/20 px-2 py-1.5 mono text-[12px] text-porcelain"
-            />
-          </div>
-          <button type="button" onClick={addContact} className="mono text-[10px] px-3 py-2 border border-forest text-[#4ade80] bg-forest/10">
-            ADD CONTACT
+    <div className="p-6 space-y-4 pb-24">
+      <header className="flex flex-wrap items-center gap-2">
+        <button type="button" onClick={() => setFilter("all")} className={filter === "all" ? "pill-green" : "pill-gray"}>All</button>
+        {(["not_started", "messaged", "responded", "converted"] as ContactStatus[]).map((status) => (
+          <button
+            key={status}
+            type="button"
+            onClick={() => setFilter(status)}
+            className={filter === status ? "pill-green" : "pill-gray"}
+          >
+            {STATUS_LABELS[status]}
           </button>
+        ))}
+      </header>
+
+      <section className="space-y-3">
+        {visible.length === 0 && (
+          <div className="empty-state">
+            <Users size={48} className="text-[var(--text-dim)]" />
+            <p className="text-[15px] text-[var(--text-primary)]">No contacts</p>
+            <p className="text-[13px] text-[var(--text-secondary)]">Try another status filter.</p>
+          </div>
+        )}
+
+        {visible.map((contact) => (
+          <article key={contact.id} className="card !p-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <span className="h-10 w-10 rounded-full bg-[var(--bg-elevated)] border border-[var(--border)] text-[var(--text-primary)] text-[13px] font-semibold flex items-center justify-center">
+                  {contact.name.split(" ").map((part) => part[0]).slice(0, 2).join("").toUpperCase()}
+                </span>
+                <div>
+                  <h3 className="text-[15px] text-[var(--text-primary)]">{contact.name}</h3>
+                  <p className="text-[13px] text-[var(--text-secondary)]">Coordinator · {contact.company || "Unknown studio"}</p>
+                  <p className="data text-[11px] text-[var(--text-dim)] mt-1">
+                    Last contact: {contact.last_contact ? timeAgo(contact.last_contact) : "-"}
+                  </p>
+                </div>
+              </div>
+
+              <span className={STATUS_CLASSES[contact.status]}>{STATUS_LABELS[contact.status]}</span>
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <a href="#" className="btn !py-1.5 !px-2.5 inline-flex items-center gap-1 text-[12px]">
+                LinkedIn <ExternalLink size={12} />
+              </a>
+
+              <details className="group">
+                <summary className="btn !py-1.5 !px-2.5 text-[12px] list-none inline-flex items-center gap-1 cursor-pointer">
+                  Notes <ChevronDown size={12} className="transition-transform group-open:rotate-180" />
+                </summary>
+                <p className="mt-2 text-[13px] text-[var(--text-secondary)]">{contact.notes || "No notes yet."}</p>
+              </details>
+
+              <select
+                value={contact.status}
+                onChange={async (e) => {
+                  const nextStatus = e.target.value as ContactStatus;
+                  await fetch(`/api/outreach/${contact.id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ status: nextStatus, last_contact: new Date().toISOString() }),
+                  });
+                  setContacts((prev) =>
+                    prev.map((item) =>
+                      item.id === contact.id ? { ...item, status: nextStatus, last_contact: new Date().toISOString() } : item
+                    )
+                  );
+                }}
+                className="select !w-auto !py-1.5 !text-[12px]"
+              >
+                {Object.entries(STATUS_LABELS).map(([key, label]) => (
+                  <option key={key} value={key}>{label}</option>
+                ))}
+              </select>
+            </div>
+          </article>
+        ))}
+      </section>
+
+      <button
+        type="button"
+        onClick={() => setShowModal(true)}
+        className="fixed right-6 bottom-6 btn btn-green shadow-lg text-[13px]"
+      >
+        + Add Contact
+      </button>
+
+      {showModal && (
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-6" onClick={() => setShowModal(false)}>
+          <div className="card w-full max-w-xl" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-[18px]">Add Contact</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+              <input value={form.name} onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))} placeholder="Name" className="input" />
+              <input value={form.company} onChange={(e) => setForm((prev) => ({ ...prev, company: e.target.value }))} placeholder="Company" className="input" />
+              <select value={form.platform} onChange={(e) => setForm((prev) => ({ ...prev, platform: e.target.value }))} className="select">
+                <option>LinkedIn</option>
+                <option>Instagram</option>
+                <option>Email</option>
+                <option>Direct</option>
+              </select>
+              <input value={form.notes} onChange={(e) => setForm((prev) => ({ ...prev, notes: e.target.value }))} placeholder="Notes" className="input" />
+            </div>
+            <div className="mt-4 flex items-center justify-end gap-2">
+              <button type="button" onClick={() => setShowModal(false)} className="btn">Cancel</button>
+              <button type="button" onClick={addContact} className="btn btn-green">Save</button>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <label className="mono text-[10px] text-sage tracking-wider">FILTER</label>
-        <select
-          value={filter}
-          onChange={(e) => setFilter(e.target.value as "all" | ContactStatus)}
-          className="bg-black/20 border border-sage/20 px-2 py-1 mono text-[11px] text-sage"
-        >
-          <option value="all">ALL</option>
-          {Object.entries(STATUS_LABELS).map(([key, label]) => (
-            <option key={key} value={key}>
-              {label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="panel overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="mono text-[10px] text-sage border-b border-sage/20">
-              <th className="p-3">NAME</th>
-              <th className="p-3">COMPANY</th>
-              <th className="p-3">PLATFORM</th>
-              <th className="p-3">STATUS</th>
-              <th className="p-3">LAST CONTACT</th>
-              <th className="p-3">NOTES</th>
-            </tr>
-          </thead>
-          <tbody>
-            {visible.map((contact) => (
-              <tr key={contact.id} className="border-b border-sage/10 align-top">
-                <td className="p-3 text-[12px] text-porcelain">{contact.name}</td>
-                <td className="p-3 text-[12px] text-sage-light">{contact.company || "-"}</td>
-                <td className="p-3 text-[12px] text-sage-light">{contact.platform || "-"}</td>
-                <td className="p-3">
-                  <select
-                    value={contact.status}
-                    onChange={async (e) => {
-                      const nextStatus = e.target.value as ContactStatus;
-                      await fetch(`/api/outreach/${contact.id}`, {
-                        method: "PATCH",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ status: nextStatus, last_contact: new Date().toISOString() }),
-                      });
-                      setContacts((prev) =>
-                        prev.map((item) =>
-                          item.id === contact.id
-                            ? { ...item, status: nextStatus, last_contact: new Date().toISOString() }
-                            : item
-                        )
-                      );
-                    }}
-                    className={`mono text-[10px] px-2 py-1 border rounded ${STATUS_COLORS[contact.status]}`}
-                  >
-                    {Object.entries(STATUS_LABELS).map(([key, label]) => (
-                      <option key={key} value={key}>
-                        {label}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td className="p-3 mono text-[10px] text-sage">
-                  {contact.last_contact
-                    ? new Date(contact.last_contact).toLocaleDateString("en-US", { month: "short", day: "numeric" })
-                    : "-"}
-                </td>
-                <td className="p-3 text-[12px] text-sage-light">{contact.notes || "-"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      )}
     </div>
   );
+}
+
+function timeAgo(iso: string) {
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / (1000 * 60 * 60 * 24));
+  if (days <= 0) return "today";
+  if (days === 1) return "1 day ago";
+  return `${days} days ago`;
 }

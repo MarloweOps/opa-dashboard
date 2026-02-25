@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { ExternalLink } from "@/components/icons";
 
 type TodayTask = {
   id: string;
@@ -70,100 +71,59 @@ export default function TodayPage() {
 
   const bestTask = grouped.priority[0] || grouped.backlog[0];
 
+  const toggleTask = async (task: TodayTask, group: "priority" | "backlog" | "done") => {
+    const nextDone = !task.done;
+    const nextPriority = nextDone ? "done" : group;
+
+    await fetch(`/api/today/${task.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ done: nextDone, priority: nextPriority }),
+    });
+
+    setTasks((prev) => prev.map((item) => (item.id === task.id ? { ...item, done: nextDone, priority: nextPriority } : item)));
+  };
+
   return (
-    <div className="p-6 grid grid-cols-1 xl:grid-cols-5 gap-4">
-      <section className="xl:col-span-3 panel">
-        <div className="panel-header flex items-center justify-between">
-          <span>◈ Today&apos;s Focus</span>
-          <span className="mono text-[10px] text-sage">Last synced {timeSince(lastSync)} ago</span>
+    <div className="p-6 grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_360px] gap-5">
+      <section className="card !p-0">
+        <div className="px-5 py-4 border-b border-[var(--border)] flex items-center justify-between">
+          <h2 className="text-[18px] text-[var(--text-primary)]">Today&apos;s Focus</h2>
+          <span className="data text-[11px] text-[var(--text-dim)]">Last synced {timeSince(lastSync)} ago</span>
         </div>
 
-        <div className="p-4 space-y-5">
-          <TaskGroup
-            title="PRIORITY"
-            tasks={grouped.priority}
-            onToggle={async (task) => {
-              const nextDone = !task.done;
-              await fetch(`/api/today/${task.id}`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ done: nextDone, priority: nextDone ? "done" : "priority" }),
-              });
-              setTasks((prev) =>
-                prev.map((item) =>
-                  item.id === task.id ? { ...item, done: nextDone, priority: nextDone ? "done" : "priority" } : item
-                )
-              );
-            }}
-            priority
-          />
-
-          <TaskGroup
-            title="BACKLOG"
-            tasks={grouped.backlog}
-            onToggle={async (task) => {
-              const nextDone = !task.done;
-              await fetch(`/api/today/${task.id}`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ done: nextDone, priority: nextDone ? "done" : "backlog" }),
-              });
-              setTasks((prev) =>
-                prev.map((item) =>
-                  item.id === task.id ? { ...item, done: nextDone, priority: nextDone ? "done" : "backlog" } : item
-                )
-              );
-            }}
-          />
-
-          <TaskGroup
-            title="DONE"
-            tasks={grouped.done}
-            onToggle={async (task) => {
-              const nextDone = !task.done;
-              await fetch(`/api/today/${task.id}`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ done: nextDone, priority: nextDone ? "done" : "backlog" }),
-              });
-              setTasks((prev) =>
-                prev.map((item) =>
-                  item.id === task.id ? { ...item, done: nextDone, priority: nextDone ? "done" : "backlog" } : item
-                )
-              );
-            }}
-          />
+        <div className="p-5 space-y-6">
+          <TaskGroup title="PRIORITY" accent="var(--green)" tasks={grouped.priority} onToggle={(task) => toggleTask(task, "priority")} />
+          <TaskGroup title="BACKLOG" accent="var(--text-dim)" tasks={grouped.backlog} onToggle={(task) => toggleTask(task, "backlog")} />
+          <TaskGroup title="DONE" accent="var(--text-dim)" tasks={grouped.done} done onToggle={(task) => toggleTask(task, "done")} />
         </div>
       </section>
 
-      <aside className="xl:col-span-2 panel p-4 space-y-4">
-        <div>
-          <p className="mono text-[10px] text-sage tracking-wider mb-2">80/20 FOCUS</p>
-          <p className="text-[13px] text-porcelain leading-relaxed">
+      <aside className="space-y-4">
+        <section className="card">
+          <p className="section-title mb-2">80/20 Focus</p>
+          <p className="text-[15px] text-[var(--text-primary)] leading-relaxed">
             {bestTask ? bestTask.task : "No priority task set. Pull one task from backlog into PRIORITY."}
           </p>
-        </div>
+        </section>
 
-        <div>
-          <p className="mono text-[10px] text-sage tracking-wider mb-2">MARLOWE SEQUENCE</p>
-          <p className="text-[12px] text-sage-light leading-relaxed">{status.notes || "No sequence note available."}</p>
-        </div>
-
-        <div className="border border-sage/20 bg-forest/10 p-3 space-y-2">
-          <p className="mono text-[10px] text-sage tracking-wider">OPA DAILY METRICS</p>
-          <div className="flex justify-between mono text-[11px]"><span className="text-sage">MRR</span><span className="text-[#4ade80]">${status.mrr.toLocaleString()}</span></div>
-          <div className="flex justify-between mono text-[11px]"><span className="text-sage">Active trials</span><span className="text-porcelain">{status.activeTrials}</span></div>
-          <div className="flex justify-between mono text-[11px]"><span className="text-sage">Oldest trial</span><span className="text-porcelain">{status.oldestTrialDays}d</span></div>
-        </div>
-
-        <div>
-          <p className="mono text-[10px] text-sage tracking-wider mb-2">QUICK LINKS</p>
+        <section className="card">
+          <p className="section-title mb-3">Quick Stats</p>
           <div className="space-y-2">
-            <a href="https://app.useopa.com" target="_blank" className="block text-[12px] text-sage-light hover:text-porcelain transition-colors">app.useopa.com</a>
-            <a href="/" className="block text-[12px] text-sage-light hover:text-porcelain transition-colors">marlowe-dashboard</a>
-            <a href="https://app.resend.com" target="_blank" className="block text-[12px] text-sage-light hover:text-porcelain transition-colors">Resend dashboard</a>
+            <div className="flex items-center justify-between"><span>Trials remaining</span><span className="data text-[var(--text-primary)]">{status.activeTrials}</span></div>
+            <div className="flex items-center justify-between"><span>Oldest trial expiry</span><span className="data text-[var(--text-primary)]">{status.oldestTrialDays} days</span></div>
+            <div className="flex items-center justify-between"><span>MRR</span><span className="data text-[var(--green)]">${status.mrr.toLocaleString()}</span></div>
           </div>
-        </div>
+        </section>
+
+        <section className="card">
+          <p className="section-title mb-3">Quick Links</p>
+          <div className="flex flex-col gap-2">
+            <LinkButton href="https://app.useopa.com" label="app.useopa.com" />
+            <LinkButton href="https://linear.app" label="Linear" />
+            <LinkButton href="https://app.resend.com" label="Resend" />
+          </div>
+        </section>
       </aside>
     </div>
   );
@@ -171,38 +131,42 @@ export default function TodayPage() {
 
 function TaskGroup({
   title,
+  accent,
   tasks,
   onToggle,
-  priority,
+  done,
 }: {
   title: string;
+  accent: string;
   tasks: TodayTask[];
   onToggle: (task: TodayTask) => void;
-  priority?: boolean;
+  done?: boolean;
 }) {
   return (
     <div>
-      <h3 className="mono text-[10px] text-sage tracking-[0.2em] mb-2">{title}</h3>
+      <h3 className="section-title mb-3" style={{ borderLeft: `2px solid ${accent}`, paddingLeft: 8 }}>
+        {title}
+      </h3>
       <div className="space-y-2">
-        {tasks.length === 0 && <p className="text-[12px] text-sage italic">No tasks.</p>}
+        {tasks.length === 0 && <p className="text-[13px] text-[var(--text-dim)]">No tasks.</p>}
         {tasks.map((task) => (
           <label
             key={task.id}
-            className={`flex items-start gap-3 border px-3 py-2 cursor-pointer transition ${
-              priority ? "bg-forest/10 border-forest/40" : "bg-forest/5 border-sage/20"
-            } ${task.done ? "opacity-60" : "opacity-100"}`}
+            className={[
+              "card !p-3.5 flex items-start gap-3 cursor-pointer",
+              task.done ? "opacity-70" : "opacity-100",
+            ].join(" ")}
+            style={{ transition: "all 200ms" }}
           >
-            <input
-              type="checkbox"
-              checked={task.done}
-              onChange={() => onToggle(task)}
-              className="mt-0.5 accent-[#4ade80]"
-            />
+            <input type="checkbox" checked={task.done} onChange={() => onToggle(task)} className="mt-1 h-4 w-4 accent-[#4ade80]" />
             <div className="flex-1">
-              <p className={`text-[12px] ${task.done ? "line-through text-sage" : "text-porcelain"}`}>{task.task}</p>
-              {task.category && (
-                <span className="mono text-[9px] text-sage border border-sage/20 px-1.5 py-0.5 mt-1 inline-block">{task.category}</span>
-              )}
+              <p className={[
+                "text-[14px] transition-all",
+                task.done || done ? "line-through text-[var(--text-dim)]" : "text-[var(--text-primary)]",
+              ].join(" ")}>
+                {task.task}
+              </p>
+              {task.category && <span className="pill-gray data text-[10px] mt-1.5">{task.category}</span>}
             </div>
           </label>
         ))}
@@ -211,8 +175,18 @@ function TaskGroup({
   );
 }
 
+function LinkButton({ href, label }: { href: string; label: string }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="btn inline-flex items-center justify-between">
+      <span>{label}</span>
+      <ExternalLink size={14} />
+    </a>
+  );
+}
+
 function timeSince(date: Date | null) {
   if (!date) return "-";
   const secs = Math.max(0, Math.floor((Date.now() - date.getTime()) / 1000));
-  return `${secs}s`;
+  if (secs < 60) return `${secs}s`;
+  return `${Math.floor(secs / 60)}m`;
 }

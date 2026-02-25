@@ -1,77 +1,80 @@
 "use client";
 
-type Agent = {
-  id: string;
+type RuntimeStatus = "active" | "building" | "waiting" | "idle";
+
+type AgentCardData = {
   name: string;
-  role: string | null;
+  role: string;
+  color: string;
   task: string | null;
-  status: "active" | "queued" | "done";
-  started_at: string;
+  runtimeStatus: RuntimeStatus;
+  runtimeLabel: string;
+  startedAt?: string;
+  progress?: number;
 };
 
-function formatDuration(startedAt: string) {
-  const delta = Date.now() - new Date(startedAt).getTime();
-  const minutes = Math.max(0, Math.floor(delta / 60000));
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
-  return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
-}
+const STATUS_STYLE: Record<RuntimeStatus, string> = {
+  active: "pill-green",
+  building: "pill-amber",
+  waiting: "pill-amber",
+  idle: "pill-gray",
+};
 
 export default function AgentCard({
   agent,
-  onKill,
+  onClick,
 }: {
-  agent: Agent;
-  onKill: (id: string) => void;
+  agent: AgentCardData;
+  onClick: () => void;
 }) {
-  const active = agent.status === "active";
+  const initials = agent.name.slice(0, 1).toUpperCase();
+  const isActive = agent.runtimeStatus === "active";
+  const isIdle = agent.runtimeStatus === "idle";
+  const mins = agent.startedAt ? minutesSince(agent.startedAt) : 0;
 
   return (
-    <article className="panel p-3">
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <h4 className="mono text-[12px] text-porcelain tracking-wide font-semibold">{agent.name}</h4>
-          <p className="text-[11px] text-sage">{agent.role || "Sub-agent"}</p>
+    <button
+      type="button"
+      onClick={onClick}
+      className={[
+        "card text-left w-full relative overflow-hidden",
+        isActive ? "border-l-[3px] border-l-[var(--green)] bg-[rgba(74,222,128,0.06)]" : "",
+      ].join(" ")}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <span
+          className="h-11 w-11 rounded-full text-white text-[15px] font-semibold flex items-center justify-center"
+          style={{ backgroundColor: agent.color, opacity: isIdle ? 0.6 : 1 }}
+        >
+          {initials}
+        </span>
+        <span className={`${STATUS_STYLE[agent.runtimeStatus]} data uppercase text-[10px]`}>{agent.runtimeLabel}</span>
+      </div>
+
+      <h3 className="text-[15px] font-semibold text-[var(--text-primary)] mt-4">{agent.name}</h3>
+      <p className="text-[13px] text-[var(--text-secondary)]">{agent.role}</p>
+
+      <p className="text-[12px] text-[var(--text-secondary)] mt-3 truncate">{agent.task || "Available"}</p>
+
+      <div className="mt-3">
+        <div className="h-1.5 rounded-full bg-black/30 overflow-hidden">
+          <div
+            className="h-full rounded-full"
+            style={{
+              width: `${agent.progress ?? (isActive ? 45 : 0)}%`,
+              backgroundColor: isActive ? "var(--green)" : "var(--text-dim)",
+            }}
+          />
         </div>
-        <span className={`status-dot ${active ? "building pulse" : "pending"}`} />
+        <p className="data text-[10px] text-[var(--text-secondary)] mt-1.5">
+          {isActive ? `running ${mins}m` : isIdle ? "idle" : "queued"}
+        </p>
       </div>
-
-      <p className="text-[12px] text-sage-light mt-2 line-clamp-2 min-h-[36px]">{agent.task || "Awaiting task assignment."}</p>
-      <p className="mono text-[10px] text-sage mt-2">{formatDuration(agent.started_at)}</p>
-
-      <div className="h-1 rounded-full bg-forest-dark mt-2 overflow-hidden">
-        {active ? (
-          <div className="h-full w-1/2 shimmer" />
-        ) : (
-          <div className="h-full w-1/4 bg-sage/40" />
-        )}
-      </div>
-
-      <button
-        type="button"
-        onClick={() => {
-          if (window.confirm(`Kill ${agent.name}?`)) onKill(agent.id);
-        }}
-        className="mt-3 mono text-[10px] px-2 py-1 border border-terracotta/40 text-terracotta hover:bg-terracotta/10 transition-colors"
-      >
-        KILL
-      </button>
-
-      <style jsx>{`
-        .shimmer {
-          background: linear-gradient(90deg, rgba(74, 222, 128, 0.15), rgba(74, 222, 128, 0.75), rgba(74, 222, 128, 0.15));
-          animation: shimmer 1.3s linear infinite;
-          background-size: 200% 100%;
-        }
-        @keyframes shimmer {
-          from {
-            background-position: 200% 0;
-          }
-          to {
-            background-position: -200% 0;
-          }
-        }
-      `}</style>
-    </article>
+    </button>
   );
+}
+
+function minutesSince(iso: string) {
+  const ms = Date.now() - new Date(iso).getTime();
+  return Math.max(0, Math.floor(ms / 60000));
 }
