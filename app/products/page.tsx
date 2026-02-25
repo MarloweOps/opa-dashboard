@@ -3,6 +3,7 @@ import { getStatus } from "@/lib/data";
 export const dynamic = "force-dynamic";
 
 const DOWNLOADS = [
+  { label: "OPA Production Master v1.4", file: "/downloads/OPA-Production-Master-v1.4.xlsx", size: "47 KB" },
   { label: "OPA Production Master v1.3", file: "/downloads/OPA-Production-Master-v1.3.xlsx", size: "47 KB" },
   { label: "OPA Production Master v1.2", file: "/downloads/OPA-Production-Master-v1.2.xlsx", size: "46 KB" },
   { label: "OPA Production Master v1.1", file: "/downloads/OPA-Production-Master-v1.1.xlsx", size: "45 KB" },
@@ -19,8 +20,8 @@ export default async function ProductsPage() {
 
         <article className="card !p-4">
           <p className="section-title">OPA Production Master</p>
-          <h3 className="text-[20px] mt-1">v1.4 (in progress)</h3>
-          <p className="text-[14px] text-[var(--text-secondary)] mt-2">Commercial production operating system template for F45 operators.</p>
+          <h3 className="text-[20px] mt-1">v1.4 — Ready</h3>
+          <p className="text-[14px] text-[var(--text-secondary)] mt-2">13-sheet commercial production operating system. Info Sheet → CSD1 cross-links, QTY×Rate Change Order, editable markup %.</p>
           <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-2">
             <p className="data text-[12px]">MRR <span className="text-[var(--green)]">${status.mrr.toLocaleString()}</span></p>
             <p className="data text-[12px]">Paying users <span className="text-[var(--text-primary)]">{status.payingUsers}</span></p>

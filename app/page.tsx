@@ -158,12 +158,12 @@ export default async function Dashboard() {
 
       <Section title="Downloads">
         <a
-          href="/downloads/OPA-Production-Master-v1.3.xlsx"
+          href="/downloads/OPA-Production-Master-v1.4.xlsx"
           download
           className="card !p-4 flex items-center justify-between hover:bg-[var(--bg-elevated)]"
         >
           <div>
-            <p className="text-[15px] text-[var(--text-primary)]">OPA Production Master v1.3</p>
+            <p className="text-[15px] text-[var(--text-primary)]">OPA Production Master v1.4</p>
             <p className="data text-[11px] text-[var(--text-secondary)] mt-1">13-sheet operating system - .xlsx - 47 KB</p>
           </div>
           <span className="btn !py-1.5 !px-2 text-[12px]">Download</span>
