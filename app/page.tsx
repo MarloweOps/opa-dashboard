@@ -1,4 +1,5 @@
 import { getStatus, StatusData, RoadmapItem } from "@/lib/data";
+import ApprovalKanban from "@/components/ApprovalKanban";
 
 export const dynamic = "force-dynamic";
 
@@ -54,6 +55,7 @@ export default async function Dashboard() {
 
   return (
     <main className="p-6 space-y-5">
+      <ApprovalKanban />
       <header className="card">
         <div className="flex items-start justify-between gap-3">
           <div>

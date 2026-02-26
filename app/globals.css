@@ -134,6 +134,14 @@ a {
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
+.pulse-dot {
+  animation: pulse-dot 1.5s ease-in-out infinite;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
 .pill,
 .pill-green,
 .pill-amber,
