@@ -29,7 +29,11 @@ export default async function ProductsPage() {
             <p className="data text-[12px]">Paying users <span className="text-[var(--text-primary)]">{status.payingUsers}</span></p>
             <p className="data text-[12px]">Template revenue <span className="text-[var(--text-primary)]">${status.lsRevenue.toLocaleString()}</span></p>
           </div>
-          <button disabled className="btn mt-3 opacity-40 cursor-not-allowed">Push to Lemon Squeezy</button>
+          <div className="mt-3 flex gap-2 flex-wrap">
+            <a href="https://app.lemonsqueezy.com/products/853842" target="_blank" className="btn text-[12px]">View in Lemon Squeezy ↗</a>
+            <a href="https://thevaried.lemonsqueezy.com/checkout/buy/cff26cd8-7ff8-457a-b5c7-8065bb9b44be" target="_blank" className="btn text-[12px] opacity-60">Preview Checkout ↗</a>
+          </div>
+          <p className="text-[11px] text-[var(--text-secondary)] mt-2 font-mono">Product ID: 853842 · Draft (pending LS account approval)</p>
         </article>
 
         <article className="card !p-4">
