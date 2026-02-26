@@ -3,7 +3,8 @@ import { getStatus } from "@/lib/data";
 export const dynamic = "force-dynamic";
 
 const DOWNLOADS = [
-  { label: "Acid Media — Brand Positioning Doc", file: "/downloads/Acid-Media-Brand-Positioning.md", size: "15 KB", tag: "NEW" },
+  { label: "LinkedIn Profile — Final Copy", file: "/downloads/LinkedIn-Profile-Final.md", size: "9 KB", tag: "NEW" },
+  { label: "Acid Media — Brand Positioning Doc", file: "/downloads/Acid-Media-Brand-Positioning.md", size: "15 KB" },
   { label: "OPA Production Master v1.4", file: "/downloads/OPA-Production-Master-v1.4.xlsx", size: "47 KB" },
   { label: "OPA Production Master v1.3", file: "/downloads/OPA-Production-Master-v1.3.xlsx", size: "47 KB" },
   { label: "OPA Production Master v1.2", file: "/downloads/OPA-Production-Master-v1.2.xlsx", size: "46 KB" },
