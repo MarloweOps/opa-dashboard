@@ -1,8 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Menu } from "@/components/icons";
 
-export default function TopBar({ title }: { title: string }) {
+type TopBarProps = {
+  title: string;
+  onMenuClick: () => void;
+};
+
+export default function TopBar({ title, onMenuClick }: TopBarProps) {
   const [online, setOnline] = useState(false);
 
   useEffect(() => {
@@ -22,17 +28,28 @@ export default function TopBar({ title }: { title: string }) {
   }, []);
 
   return (
-    <header style={{
+    <header className="topbar" style={{
       position: "fixed", left: 220, right: 0, top: 0, height: 48, zIndex: 30,
       borderBottom: "1px solid #27272A", background: "#09090B",
       padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between",
     }}>
-      <h1 style={{
-        fontFamily: "'Syne', sans-serif", fontSize: 13,
-        fontWeight: 600, letterSpacing: "-0.01em", color: "#EDEDEF",
-      }}>
-        {title}
-      </h1>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <button
+          type="button"
+          className="hamburger-btn"
+          onClick={onMenuClick}
+          aria-label="Open sidebar"
+        >
+          <Menu size={20} />
+        </button>
+
+        <h1 style={{
+          fontFamily: "'Syne', sans-serif", fontSize: 13,
+          fontWeight: 600, letterSpacing: "-0.01em", color: "#EDEDEF",
+        }}>
+          {title}
+        </h1>
+      </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
         <span style={{

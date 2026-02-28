@@ -111,7 +111,7 @@ export default function Dashboard() {
       <hr className="rule" style={{ marginBottom: "var(--space-8)" }} />
 
       {/* 3-column grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "var(--space-8)" }}>
+      <div className="grid-3col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "var(--space-8)" }}>
         {/* Priorities */}
         <div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-4)" }}>
@@ -198,7 +198,7 @@ export default function Dashboard() {
       <hr className="rule" style={{ margin: "var(--space-8) 0" }} />
 
       {/* Quick nav */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "var(--space-4)" }}>
+      <div className="grid-4col" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "var(--space-4)" }}>
         {[
           { href: "/chat", label: "Chat" },
           { href: "/files", label: "Files" },

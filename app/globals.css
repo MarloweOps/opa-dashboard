@@ -310,3 +310,124 @@ a {
 input[type="checkbox"] {
   accent-color: var(--accent);
 }
+
+/* ============================================================
+   MOBILE RESPONSIVE — Breakpoint at 768px
+   ============================================================ */
+
+/* Sidebar overlay backdrop */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 39;
+}
+
+.sidebar-backdrop.open {
+  display: block;
+}
+
+/* Sidebar slide-in animation */
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slideOut {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+/* Hamburger button — hidden on desktop */
+.hamburger-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  padding: 4px;
+  margin-right: var(--space-3);
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  /* Show hamburger */
+  .hamburger-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Sidebar: off-screen by default, slide in when open */
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 200ms ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* TopBar: full-width */
+  .topbar {
+    left: 0 !important;
+  }
+
+  /* Main content: no left margin */
+  .main-content {
+    margin-left: 0 !important;
+  }
+
+  /* Dashboard 3-col grid -> single column */
+  .grid-3col {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Quick nav 4-col grid -> 2 columns */
+  .grid-4col {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Today page sidebar layout -> single column */
+  .grid-today {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Crons status row 4-col -> 2x2 */
+  .grid-cron-status {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Crons run history 5-col -> stacked */
+  .grid-run-entry {
+    grid-template-columns: 1fr 1fr !important;
+    gap: var(--space-2) !important;
+  }
+
+  .grid-run-entry > span:nth-child(n+3) {
+    display: none;
+  }
+
+  .grid-run-entry > span:last-child {
+    display: block;
+    grid-column: 1 / -1;
+  }
+
+  /* Files page preview grid -> stacked */
+  .grid-files-preview {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Files toolbar -> stack on mobile */
+  .files-toolbar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: var(--space-3) !important;
+  }
+
+  /* Chat messages — wider bubbles on mobile */
+  .chat-bubble {
+    max-width: 90% !important;
+  }
+}

@@ -90,7 +90,7 @@ export default function FilesPage() {
   return (
     <div style={{ padding: "var(--space-8)" }}>
       {/* Toolbar */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-4)" }}>
+      <div className="files-toolbar" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-4)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: "var(--font-mono)", fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
           {crumbs.map((c, i) => (
             <span key={i} style={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -124,7 +124,7 @@ export default function FilesPage() {
         </div>
       )}
 
-      <div style={preview ? { display: "grid", gridTemplateColumns: "1fr 420px", gap: "var(--space-6)" } : {}}>
+      <div className={preview ? "grid-files-preview" : ""} style={preview ? { display: "grid", gridTemplateColumns: "1fr 420px", gap: "var(--space-6)" } : {}}>
         {/* File list */}
         <div style={{ background: "var(--border)", display: "flex", flexDirection: "column", gap: "1px" }}>
           {loading ? (

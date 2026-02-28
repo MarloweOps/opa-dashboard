@@ -122,14 +122,14 @@ export default function CronsPage() {
             {/* Main row */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "var(--space-4) var(--space-6)" }}>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
                   <span style={{ fontFamily: "var(--font-tech)", fontSize: "var(--text-base)", fontWeight: 600, color: "var(--text-primary)" }}>
                     {job.name}
                   </span>
                   {!job.enabled && <span className="pill pill-muted">Disabled</span>}
                   {(job.state.consecutiveErrors || 0) > 0 && <span className="pill pill-red">{job.state.consecutiveErrors} errors</span>}
                 </div>
-                <div style={{ display: "flex", gap: "var(--space-4)", marginTop: 4, fontFamily: "var(--font-mono)", fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
+                <div style={{ display: "flex", gap: "var(--space-4)", marginTop: 4, fontFamily: "var(--font-mono)", fontSize: "var(--text-xs)", color: "var(--text-muted)", flexWrap: "wrap" }}>
                   <span>{humanSchedule(job.schedule)}</span>
                   {job.payload.model && <span>{job.payload.model}</span>}
                   {job.delivery?.channel && <span>{job.delivery.channel}</span>}
@@ -148,7 +148,7 @@ export default function CronsPage() {
             </div>
 
             {/* Status row */}
-            <div style={{
+            <div className="grid-cron-status" style={{
               display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "var(--space-4)",
               padding: "var(--space-3) var(--space-6)",
               borderTop: "1px solid var(--border-subtle)",
@@ -161,16 +161,16 @@ export default function CronsPage() {
               <div>
                 <span style={{ color: "var(--text-muted)" }}>Status</span>
                 <p style={{ color: job.state.lastRunStatus === "ok" ? "var(--accent)" : job.state.lastRunStatus ? "var(--red)" : "var(--text-secondary)", marginTop: 2 }}>
-                  {job.state.lastRunStatus || "—"}
+                  {job.state.lastRunStatus || "\u2014"}
                 </p>
               </div>
               <div>
                 <span style={{ color: "var(--text-muted)" }}>Next run</span>
-                <p style={{ color: "var(--text-secondary)", marginTop: 2 }}>{job.state.nextRunAtMs ? fmtTime(job.state.nextRunAtMs) : "—"}</p>
+                <p style={{ color: "var(--text-secondary)", marginTop: 2 }}>{job.state.nextRunAtMs ? fmtTime(job.state.nextRunAtMs) : "\u2014"}</p>
               </div>
               <div>
                 <span style={{ color: "var(--text-muted)" }}>In</span>
-                <p style={{ color: "var(--accent)", marginTop: 2 }}>{job.state.nextRunAtMs ? relTime(job.state.nextRunAtMs) : "—"}</p>
+                <p style={{ color: "var(--accent)", marginTop: 2 }}>{job.state.nextRunAtMs ? relTime(job.state.nextRunAtMs) : "\u2014"}</p>
               </div>
             </div>
 
@@ -200,7 +200,7 @@ export default function CronsPage() {
                 ) : (
                   <div style={{ display: "flex", flexDirection: "column", gap: "1px", background: "var(--border-subtle)" }}>
                     {runs[job.id].map((run, i) => (
-                      <div key={i} style={{
+                      <div key={i} className="grid-run-entry" style={{
                         display: "grid", gridTemplateColumns: "140px 60px 80px 80px 1fr",
                         gap: "var(--space-3)", alignItems: "center",
                         padding: "var(--space-2) var(--space-6)",
@@ -211,10 +211,10 @@ export default function CronsPage() {
                           {run.status}
                         </span>
                         <span style={{ color: "var(--text-muted)" }}>
-                          {run.durationMs ? `${(run.durationMs / 1000).toFixed(1)}s` : "—"}
+                          {run.durationMs ? `${(run.durationMs / 1000).toFixed(1)}s` : "\u2014"}
                         </span>
                         <span style={{ color: "var(--text-muted)" }}>
-                          {run.model || "—"}
+                          {run.model || "\u2014"}
                         </span>
                         <span style={{ color: "var(--text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                           {run.error || (run.delivered ? "delivered" : run.summary || "")}

@@ -129,7 +129,7 @@ export default function ChatPage() {
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
           {messages.map((msg, i) => (
             <div key={i} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}>
-              <div style={{
+              <div className="chat-bubble" style={{
                 maxWidth: "70%",
                 padding: "var(--space-3) var(--space-4)",
                 fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", fontWeight: 300,

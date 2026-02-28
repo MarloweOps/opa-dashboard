@@ -55,7 +55,7 @@ export default function TodayPage() {
   const nextAction = priority?.tasks.find(t => !t.done);
 
   return (
-    <div style={{ padding: "var(--space-8)", display: "grid", gridTemplateColumns: "1fr 320px", gap: "var(--space-8)" }}>
+    <div className="grid-today" style={{ padding: "var(--space-8)", display: "grid", gridTemplateColumns: "1fr 320px", gap: "var(--space-8)" }}>
       {/* Main */}
       <div>
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-xs)", color: "var(--text-muted)", marginBottom: "var(--space-6)" }}>

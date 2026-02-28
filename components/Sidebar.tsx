@@ -9,6 +9,7 @@ import {
   CheckSquare,
   Users,
   Timer,
+  X,
 } from "@/components/icons";
 
 const NAV = [
@@ -25,7 +26,13 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export default function Sidebar({ pathname }: { pathname: string }) {
+type SidebarProps = {
+  pathname: string;
+  open: boolean;
+  onClose: () => void;
+};
+
+export default function Sidebar({ pathname, open, onClose }: SidebarProps) {
   const [now, setNow] = useState(() => new Date());
   const [online, setOnline] = useState(false);
 
@@ -56,27 +63,40 @@ export default function Sidebar({ pathname }: { pathname: string }) {
   );
 
   return (
-    <aside style={{
-      position: "fixed", left: 0, top: 0, bottom: 0, width: 220, zIndex: 40,
-      display: "flex", flexDirection: "column",
-      background: "#09090B", borderRight: "1px solid #27272A",
-    }}>
-      {/* Wordmark */}
-      <div style={{ padding: "24px 24px 16px" }}>
-        <div style={{
-          fontFamily: "'Instrument Serif', Georgia, serif",
-          fontSize: 22, letterSpacing: "-0.03em",
-          color: "#EDEDEF", lineHeight: 1,
-        }}>
-          The Varied
+    <aside
+      className={`sidebar${open ? " open" : ""}`}
+      style={{
+        position: "fixed", left: 0, top: 0, bottom: 0, width: 220, zIndex: 40,
+        display: "flex", flexDirection: "column",
+        background: "#09090B", borderRight: "1px solid #27272A",
+      }}
+    >
+      {/* Wordmark + close button on mobile */}
+      <div style={{ padding: "24px 24px 16px", display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+        <div>
+          <div style={{
+            fontFamily: "'Instrument Serif', Georgia, serif",
+            fontSize: 22, letterSpacing: "-0.03em",
+            color: "#EDEDEF", lineHeight: 1,
+          }}>
+            The Varied
+          </div>
+          <div style={{
+            fontFamily: "'DM Mono', monospace", fontSize: 10,
+            fontWeight: 400, letterSpacing: "0.1em", textTransform: "uppercase" as const,
+            color: "#71717A", marginTop: 8,
+          }}>
+            Mission Control
+          </div>
         </div>
-        <div style={{
-          fontFamily: "'DM Mono', monospace", fontSize: 10,
-          fontWeight: 400, letterSpacing: "0.1em", textTransform: "uppercase" as const,
-          color: "#71717A", marginTop: 8,
-        }}>
-          Mission Control
-        </div>
+        <button
+          className="hamburger-btn"
+          onClick={onClose}
+          aria-label="Close sidebar"
+          style={{ marginRight: 0 }}
+        >
+          <X size={18} />
+        </button>
       </div>
 
       <div style={{ height: 1, background: "#27272A" }} />
@@ -89,6 +109,7 @@ export default function Sidebar({ pathname }: { pathname: string }) {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onClose}
               style={{
                 display: "flex", alignItems: "center", gap: 12,
                 padding: "8px 24px",
