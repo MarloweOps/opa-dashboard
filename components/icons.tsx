@@ -163,3 +163,83 @@ export function ExternalLink(props: IconProps) {
     </IconBase>
   );
 }
+
+export function MessageSquare(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </IconBase>
+  );
+}
+
+export function FolderOpen(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2" />
+    </IconBase>
+  );
+}
+
+export function Upload(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <polyline points="17 8 12 3 7 8" />
+      <line x1="12" x2="12" y1="3" y2="15" />
+    </IconBase>
+  );
+}
+
+export function Download(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <polyline points="7 10 12 15 17 10" />
+      <line x1="12" x2="12" y1="15" y2="3" />
+    </IconBase>
+  );
+}
+
+export function Play(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <polygon points="5 3 19 12 5 21 5 3" />
+    </IconBase>
+  );
+}
+
+export function Send(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <line x1="22" x2="11" y1="2" y2="13" />
+      <polygon points="22 2 15 22 11 13 2 9 22 2" />
+    </IconBase>
+  );
+}
+
+export function ChevronRight(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="m9 18 6-6-6-6" />
+    </IconBase>
+  );
+}
+
+export function Plus(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <line x1="12" x2="12" y1="5" y2="19" />
+      <line x1="5" x2="19" y1="12" y2="12" />
+    </IconBase>
+  );
+}
+
+export function FolderPlus(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z" />
+      <line x1="12" x2="12" y1="10" y2="16" />
+      <line x1="9" x2="15" y1="13" y2="13" />
+    </IconBase>
+  );
+}

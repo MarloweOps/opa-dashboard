@@ -5,24 +5,14 @@ import Sidebar from "@/components/Sidebar";
 import TopBar from "@/components/TopBar";
 
 const TITLES: Record<string, string> = {
-  "/": "Overview",
-  "/command": "The Office",
-  "/today": "Today's Focus",
-  "/briefs": "Brief Archive",
-  "/outreach": "Outreach Tracker",
-  "/products": "Products",
+  "/": "Dashboard",
+  "/chat": "Chat",
+  "/files": "Files",
   "/crons": "Automations",
-  "/docs": "Docs",
-  "/inbox": "Inbox",
+  "/today": "Today",
+  "/outreach": "Outreach",
   "/login": "Login",
 };
-
-function getPageTitle(pathname: string) {
-  const exact = TITLES[pathname];
-  if (exact) return exact;
-  if (pathname.startsWith("/docs/")) return "Doc";
-  return "Mission Control";
-}
 
 export default function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || "/";
@@ -34,8 +24,10 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
   return (
     <div>
       <Sidebar pathname={pathname} />
-      <TopBar title={getPageTitle(pathname)} />
-      <main className="ml-[240px] pt-[56px] min-h-screen">{children}</main>
+      <TopBar title={TITLES[pathname] || "Mission Control"} />
+      <main style={{ marginLeft: 220, paddingTop: 48, minHeight: "100vh" }}>
+        {children}
+      </main>
     </div>
   );
 }

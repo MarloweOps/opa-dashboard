@@ -1,57 +1,64 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search } from "@/components/icons";
-
-function fmtCurrency(value: number) {
-  return `$${value.toLocaleString("en-US")}`;
-}
 
 export default function TopBar({ title }: { title: string }) {
-  const [mrr, setMrr] = useState(0);
+  const [online, setOnline] = useState(false);
 
   useEffect(() => {
     let active = true;
-
-    const load = async () => {
+    const check = async () => {
       try {
-        const res = await fetch("/api/ops-status", { cache: "no-store" });
-        const json = await res.json();
-        if (active) setMrr(Number(json.mrr) || 0);
+        const r = await fetch("/api/gateway/health", { cache: "no-store" });
+        const d = await r.json();
+        if (active) setOnline(d.ok === true || !!d.uptime);
       } catch {
-        if (active) setMrr(0);
+        if (active) setOnline(false);
       }
     };
-
-    load();
-    const poll = setInterval(load, 60000);
-    return () => {
-      active = false;
-      clearInterval(poll);
-    };
+    check();
+    const poll = setInterval(check, 15000);
+    return () => { active = false; clearInterval(poll); };
   }, []);
 
   return (
-    <header className="fixed left-[240px] right-0 top-0 h-[56px] z-30 border-b border-[var(--border)] bg-[var(--bg-surface)]/95 backdrop-blur px-6 flex items-center justify-between">
-      <h1 className="text-[16px] font-semibold text-[var(--text-primary)]">{title}</h1>
+    <header style={{
+      position: "fixed", left: 220, right: 0, top: 0, height: 48, zIndex: 30,
+      borderBottom: "1px solid #27272A", background: "#09090B",
+      padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between",
+    }}>
+      <h1 style={{
+        fontFamily: "'Syne', sans-serif", fontSize: 13,
+        fontWeight: 600, letterSpacing: "-0.01em", color: "#EDEDEF",
+      }}>
+        {title}
+      </h1>
 
-      <div className="pill-green data text-[11px]">{fmtCurrency(mrr)} MRR</div>
+      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        <span style={{
+          display: "inline-flex", alignItems: "center", gap: 4,
+          padding: "2px 8px", fontSize: 12,
+          fontFamily: "'DM Mono', monospace", fontWeight: 400,
+          letterSpacing: "0.04em",
+          color: online ? "#D4551E" : "#C43030",
+          border: `1px solid ${online ? "#8C3A15" : "#7A2222"}`,
+          background: online ? "rgba(212,85,30,0.08)" : "rgba(196,48,48,0.08)",
+        }}>
+          {online ? "Gateway" : "Offline"}
+        </span>
 
-      <div className="flex items-center gap-4">
-        <button type="button" className="btn !py-1.5 !px-2.5 inline-flex items-center gap-2 text-[12px] text-[var(--text-secondary)]">
-          <Search size={14} />
-          <span className="text-[var(--text-primary)]">Search</span>
-          <span className="data text-[10px] rounded-md border border-[var(--border)] px-1.5 py-0.5">⌘K</span>
-        </button>
-
-        <span className="h-5 w-px bg-[var(--border)]" />
-
-        <div className="flex items-center gap-2">
-          <span className="h-7 w-7 rounded-full bg-[#4f46e5] text-white text-[11px] font-semibold flex items-center justify-center">B</span>
-          <span className="h-7 w-7 rounded-full bg-[#16a34a] text-white text-[11px] font-semibold flex items-center justify-center">M</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <span style={{
+            width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center",
+            background: "#D4551E", color: "#09090B", fontSize: 11, fontWeight: 600,
+            fontFamily: "'DM Mono', monospace",
+          }}>B</span>
+          <span style={{
+            width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center",
+            background: "#A1A1AA", color: "#09090B", fontSize: 11, fontWeight: 600,
+            fontFamily: "'DM Mono', monospace",
+          }}>M</span>
         </div>
-
-        <span className="status-dot live pulse" />
       </div>
     </header>
   );

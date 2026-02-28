@@ -1,211 +1,226 @@
-import { getStatus, StatusData, RoadmapItem } from "@/lib/data";
-import ApprovalKanban from "@/components/ApprovalKanban";
+"use client";
 
-export const dynamic = "force-dynamic";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { ChevronRight } from "@/components/icons";
 
-function fmt(n: number) {
-  return n.toLocaleString("en-US");
+type HealthData = {
+  ok: boolean;
+  channels?: Record<string, { configured: boolean; running: boolean; probe?: { ok: boolean; bot?: { username: string } } }>;
+};
+
+type CronJob = {
+  id: string;
+  name: string;
+  enabled: boolean;
+  state: { nextRunAtMs?: number; lastRunStatus?: string; consecutiveErrors?: number };
+};
+
+type TodayTask = { text: string; done: boolean; inProgress: boolean; lineIndex: number };
+type TodaySection = { title: string; emoji?: string; tasks: TodayTask[] };
+
+type Device = {
+  host: string;
+  ip?: string;
+  platform?: string;
+  deviceFamily?: string;
+  mode?: string;
+  reason?: string;
+  ts: number;
+};
+
+function relTime(ms: number): string {
+  const diff = ms - Date.now();
+  if (diff < 0) return "overdue";
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ${mins % 60}m`;
+  return `${Math.floor(hrs / 24)}d`;
 }
 
-function fmtDate(iso: string) {
-  return new Date(iso).toLocaleString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZoneName: "short",
-  });
+function ago(ts: number): string {
+  const secs = Math.floor((Date.now() - ts) / 1000);
+  if (secs < 60) return `${secs}s ago`;
+  if (secs < 3600) return `${Math.floor(secs / 60)}m ago`;
+  return `${Math.floor(secs / 3600)}h ago`;
 }
 
-function fmtDateShort(iso: string) {
-  return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
+export default function Dashboard() {
+  const [health, setHealth] = useState<HealthData | null>(null);
+  const [crons, setCrons] = useState<CronJob[]>([]);
+  const [sections, setSections] = useState<TodaySection[]>([]);
+  const [devices, setDevices] = useState<Device[]>([]);
 
-function statusPill(status: RoadmapItem["status"]) {
-  if (status === "blocked") return "pill-red";
-  if (status === "in_progress" || status === "shipped") return "pill-green";
-  if (status === "building" || status === "specced") return "pill-amber";
-  return "pill-gray";
-}
+  useEffect(() => {
+    const load = async () => {
+      const [h, c, t, p] = await Promise.all([
+        fetch("/api/gateway/health", { cache: "no-store" }).then(r => r.json()).catch(() => null),
+        fetch("/api/crons", { cache: "no-store" }).then(r => r.json()).catch(() => ({})),
+        fetch("/api/today", { cache: "no-store" }).then(r => r.json()).catch(() => ({})),
+        fetch("/api/gateway/presence", { cache: "no-store" }).then(r => r.json()).catch(() => ({})),
+      ]);
+      if (h) setHealth(h);
+      if (c.jobs) setCrons(c.jobs);
+      if (t.sections) setSections(t.sections);
+      if (p.devices) setDevices(p.devices);
+    };
+    load();
+    const poll = setInterval(load, 30000);
+    return () => clearInterval(poll);
+  }, []);
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  const channels = health?.channels ? Object.entries(health.channels) : [];
+  const priorities = sections.find(s => s.title.toUpperCase().includes("PRIORITY"))?.tasks.filter(t => !t.done).slice(0, 3) || [];
+  const nextCrons = crons.filter(j => j.enabled && j.state.nextRunAtMs).sort((a, b) => (a.state.nextRunAtMs || 0) - (b.state.nextRunAtMs || 0)).slice(0, 4);
+  const activeDevices = devices.filter(d => d.reason !== "disconnect");
+
   return (
-    <section className="card !p-0">
-      <div className="px-5 pt-5 pb-3 border-b border-[var(--border)]">
-        <h2 className="section-title">{title}</h2>
-      </div>
-      <div className="p-5">{children}</div>
-    </section>
-  );
-}
-
-function Metric({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
-  return (
-    <div>
-      <p className="section-title">{label}</p>
-      <p className={["data text-[22px] mt-1", accent ? "text-[var(--green)]" : "text-[var(--text-primary)]"].join(" ")}>{value}</p>
-    </div>
-  );
-}
-
-export default async function Dashboard() {
-  const data: StatusData = await getStatus();
-  const isStale = Date.now() - new Date(data.updatedAt).getTime() > 1000 * 60 * 60 * 25;
-
-  return (
-    <main className="p-6 space-y-5">
-      <ApprovalKanban />
-      <header className="card">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h1 className="serif text-[32px] text-[var(--text-primary)]">The Varied<span style={{ color: "var(--terracotta)" }}>.</span></h1>
-            <p className="text-[14px] text-[var(--text-secondary)] mt-1">Mission Control - Brendan + Marlowe</p>
-          </div>
-          <div className="text-right">
-            <span className={isStale ? "pill-red" : "pill-green"}>{isStale ? "Stale" : "Live"}</span>
-            <p className="data text-[11px] text-[var(--text-secondary)] mt-2">{fmtDate(data.updatedAt)}</p>
-          </div>
+    <div style={{ padding: "var(--space-8)" }}>
+      {/* Header */}
+      <div style={{ marginBottom: "var(--space-10)" }}>
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "var(--space-3)" }}>
+          <h1 style={{
+            fontFamily: "var(--font-serif)",
+            fontSize: "var(--text-2xl)",
+            letterSpacing: "-0.03em",
+            color: "var(--text-primary)",
+            lineHeight: 1,
+          }}>
+            Mission Control
+          </h1>
+          <span className={`pill ${health?.ok ? "pill-green" : "pill-red"}`}>
+            {health === null ? "Checking" : health.ok ? "Online" : "Offline"}
+          </span>
         </div>
-      </header>
+        <p style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", color: "var(--text-muted)", fontWeight: 300 }}>
+          Brendan + Marlowe
+        </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <Section title="Revenue Pulse">
-          <div className="grid grid-cols-2 gap-5">
-            <Metric label="MRR" value={`$${fmt(data.mrr)}`} accent />
-            <Metric label="MRR Delta (7d)" value={`${data.mrrDelta >= 0 ? "+" : "-"}$${fmt(Math.abs(data.mrrDelta))}`} />
-            <Metric label="Paying Users" value={`${data.payingUsers}`} />
-            <Metric label="Trials This Week" value={`${data.trialsThisWeek}`} />
-            <Metric label="Conversion Rate" value={`${data.trialConversionRate}%`} />
-            <Metric label="Outreach Sent" value={`${data.outreachSentThisWeek}/wk`} />
-            <Metric label="Template Revenue" value={`$${fmt(data.lsRevenue)}`} />
-            <Metric label="SEO Articles" value={`${data.seoArticles}`} />
-          </div>
-        </Section>
-
-        <Section title="Last Heartbeat">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-[13px]">Ran</span>
-              <span className="data text-[12px] text-[var(--text-primary)]">{fmtDate(data.heartbeat.lastRun)}</span>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <Score title="Risk" value={data.heartbeat.riskScore} bad />
-              <Score title="Leverage" value={data.heartbeat.leverageScore} />
-            </div>
-            <div className="card !p-3.5 !bg-black/20">
-              <p className="section-title mb-1">Urgent Threat</p>
-              <p className="text-[14px] text-[var(--text-primary)]">{data.heartbeat.urgentThreat}</p>
-            </div>
-            <div className="card !p-3.5 !bg-black/20">
-              <p className="section-title mb-1">Decisive Action</p>
-              <p className="text-[14px] text-[var(--text-primary)]">{data.heartbeat.decisiveAction}</p>
-            </div>
-          </div>
-        </Section>
-      </div>
-
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-        <Roadmap title="iOS Roadmap" items={data.roadmap.ios} />
-        <Roadmap title="Web Priorities" items={[...data.roadmap.web, ...data.roadmap.product]} />
-        <Roadmap title="Revenue Streams" items={data.roadmap.revenue} />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <Section title="Marlowe Activity">
-          <div className="space-y-3">
-            {data.activeAgents.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {data.activeAgents.map((agent) => (
-                  <span key={agent} className="pill-green data text-[10px]">{agent}</span>
-                ))}
-              </div>
-            )}
-
-            {data.recentChanges.length === 0 && <p className="text-[14px] text-[var(--text-dim)]">No recent changes logged.</p>}
-
-            {data.recentChanges.map((change, index) => (
-              <div key={index} className="card !p-3.5">
-                <div className="flex items-center justify-between gap-3">
-                  <p className="data text-[11px] text-[var(--text-primary)]">{change.file}</p>
-                  <span className={change.risk === "high" ? "pill-red" : change.risk === "med" ? "pill-amber" : "pill-gray"}>{change.risk}</span>
-                </div>
-                <p className="text-[13px] mt-2">{change.summary}</p>
-                <p className="data text-[11px] text-[var(--text-dim)] mt-2">{fmtDateShort(change.timestamp)}</p>
-              </div>
+        {channels.length > 0 && (
+          <div style={{ display: "flex", gap: "var(--space-2)", marginTop: "var(--space-4)" }}>
+            {channels.map(([name, ch]) => (
+              <span key={name} className={`pill ${ch.running && ch.probe?.ok !== false ? "pill-green" : ch.configured ? "pill-orange" : "pill-muted"}`}>
+                {name}
+              </span>
             ))}
           </div>
-        </Section>
+        )}
+      </div>
 
-        <Section title="Current Focus">
-          <div className="space-y-4">
-            {data.notes && (
-              <div>
-                <p className="section-title mb-1">Marlowe Notes</p>
-                <p className="text-[14px] text-[var(--text-primary)]">{data.notes}</p>
-              </div>
-            )}
-            <div>
-              <p className="section-title mb-1">Opportunity</p>
-              <p className="text-[14px] text-[var(--text-primary)]">&ldquo;{data.heartbeat.valuableOpportunity}&rdquo;</p>
+      <hr className="rule" style={{ marginBottom: "var(--space-8)" }} />
+
+      {/* 3-column grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "var(--space-8)" }}>
+        {/* Priorities */}
+        <div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-4)" }}>
+            <span className="t-label">Priorities</span>
+            <Link href="/today" style={{ display: "flex", alignItems: "center", gap: 2, fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
+              All <ChevronRight size={10} />
+            </Link>
+          </div>
+          {priorities.length === 0 ? (
+            <p style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>No priorities set.</p>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+              {priorities.map((task, i) => (
+                <div key={i} style={{
+                  padding: "var(--space-3) var(--space-4)",
+                  borderLeft: "2px solid var(--accent)",
+                  background: "var(--bg-elevated)",
+                }}>
+                  <p style={{ fontSize: "var(--text-sm)", color: "var(--text-primary)", fontFamily: "var(--font-mono)", fontWeight: 300, lineHeight: 1.5 }}>
+                    {task.text}
+                  </p>
+                </div>
+              ))}
             </div>
-            <div className="grid grid-cols-3 gap-2">
-              <Metric label="Target MRR" value="$15k" />
-              <Metric label="Current" value={`$${fmt(data.mrr)}`} accent />
-              <Metric label="To Go" value={`$${fmt(15000 - data.mrr)}`} />
+          )}
+        </div>
+
+        {/* Next Runs */}
+        <div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-4)" }}>
+            <span className="t-label">Next Runs</span>
+            <Link href="/crons" style={{ display: "flex", alignItems: "center", gap: 2, fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
+              All <ChevronRight size={10} />
+            </Link>
+          </div>
+          {nextCrons.length === 0 ? (
+            <p style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>No scheduled jobs.</p>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "1px", background: "var(--border)" }}>
+              {nextCrons.map((job) => (
+                <div key={job.id} style={{
+                  display: "flex", justifyContent: "space-between", alignItems: "center",
+                  padding: "var(--space-3) var(--space-4)", background: "var(--bg-elevated)",
+                }}>
+                  <span style={{ fontSize: "var(--text-sm)", color: "var(--text-primary)", fontFamily: "var(--font-mono)", fontWeight: 300 }}>
+                    {job.name}
+                  </span>
+                  <span style={{ fontSize: "var(--text-xs)", color: "var(--accent)", fontFamily: "var(--font-mono)" }}>
+                    {job.state.nextRunAtMs ? relTime(job.state.nextRunAtMs) : "—"}
+                  </span>
+                </div>
+              ))}
             </div>
-          </div>
-        </Section>
+          )}
+        </div>
+
+        {/* Connected Devices */}
+        <div>
+          <span className="t-label" style={{ display: "block", marginBottom: "var(--space-4)" }}>Devices</span>
+          {activeDevices.length === 0 ? (
+            <p style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>No active connections.</p>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+              {activeDevices.map((d, i) => (
+                <div key={i} style={{ padding: "var(--space-3) var(--space-4)", background: "var(--bg-elevated)", borderLeft: "2px solid var(--border)" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontSize: "var(--text-sm)", color: "var(--text-primary)", fontFamily: "var(--font-mono)", fontWeight: 300 }}>
+                      {d.host}
+                    </span>
+                    <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>
+                      {ago(d.ts)}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontFamily: "var(--font-mono)", marginTop: 2 }}>
+                    {[d.platform, d.ip, d.mode].filter(Boolean).join(" · ")}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
-      <Section title="Downloads">
-        <a
-          href="/downloads/OPA-Production-Master-v1.4.xlsx"
-          download
-          className="card !p-4 flex items-center justify-between hover:bg-[var(--bg-elevated)]"
-        >
-          <div>
-            <p className="text-[15px] text-[var(--text-primary)]">OPA Production Master v1.4</p>
-            <p className="data text-[11px] text-[var(--text-secondary)] mt-1">13-sheet operating system - .xlsx - 47 KB</p>
-          </div>
-          <span className="btn !py-1.5 !px-2 text-[12px]">Download</span>
-        </a>
-      </Section>
-    </main>
-  );
-}
+      <hr className="rule" style={{ margin: "var(--space-8) 0" }} />
 
-function Score({ title, value, bad }: { title: string; value: number; bad?: boolean }) {
-  return (
-    <div>
-      <div className="flex items-center justify-between">
-        <p className="section-title">{title}</p>
-        <p className="data text-[15px] text-[var(--text-primary)]">{value}/10</p>
-      </div>
-      <div className="mt-2 h-2 rounded-full bg-black/30 overflow-hidden">
-        <div
-          className="h-full rounded-full"
-          style={{
-            width: `${Math.min(100, value * 10)}%`,
-            backgroundColor: bad ? "var(--red)" : "var(--green)",
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
-function Roadmap({ title, items }: { title: string; items: RoadmapItem[] }) {
-  return (
-    <Section title={title}>
-      <div className="space-y-2.5">
-        {items.map((item) => (
-          <div key={item.label} className="flex items-start justify-between gap-3 card !p-3.5">
-            <p className="text-[13px] text-[var(--text-primary)]">{item.label}</p>
-            <span className={`${statusPill(item.status)} data text-[10px] uppercase`}>{item.status.replace("_", " ")}</span>
-          </div>
+      {/* Quick nav */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "var(--space-4)" }}>
+        {[
+          { href: "/chat", label: "Chat" },
+          { href: "/files", label: "Files" },
+          { href: "/crons", label: "Automations" },
+          { href: "/today", label: "Today" },
+        ].map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            style={{
+              padding: "var(--space-4) var(--space-6)",
+              border: "1px solid var(--border)", background: "var(--bg-elevated)",
+              fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)",
+              color: "var(--text-primary)", fontWeight: 300,
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+            }}
+          >
+            {item.label}
+            <ChevronRight size={14} style={{ color: "var(--text-muted)" }} />
+          </Link>
         ))}
       </div>
-    </Section>
+    </div>
   );
 }

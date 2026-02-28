@@ -1,192 +1,163 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { ExternalLink } from "@/components/icons";
+import { useEffect, useState, useCallback } from "react";
+import { Plus } from "@/components/icons";
 
-type TodayTask = {
-  id: string;
-  task: string;
-  category: string | null;
-  priority: "priority" | "backlog" | "done";
-  done: boolean;
-  updated_at: string;
-};
-
-type OpsStatus = {
-  mrr: number;
-  activeTrials: number;
-  oldestTrialDays: number;
-  notes: string;
-  updatedAt: string;
-};
-
-const EMPTY_STATUS: OpsStatus = {
-  mrr: 0,
-  activeTrials: 0,
-  oldestTrialDays: 0,
-  notes: "",
-  updatedAt: new Date().toISOString(),
-};
+type TodayTask = { text: string; done: boolean; inProgress: boolean; lineIndex: number };
+type TodaySection = { title: string; emoji?: string; tasks: TodayTask[] };
+type TodayData = { heading: string; sections: TodaySection[] };
 
 export default function TodayPage() {
-  const [tasks, setTasks] = useState<TodayTask[]>([]);
-  const [status, setStatus] = useState<OpsStatus>(EMPTY_STATUS);
-  const [lastSync, setLastSync] = useState<Date | null>(null);
+  const [data, setData] = useState<TodayData | null>(null);
+  const [newTask, setNewTask] = useState("");
+  const [adding, setAdding] = useState(false);
 
-  useEffect(() => {
-    let active = true;
-
-    const load = async () => {
-      try {
-        const [tasksRes, statusRes] = await Promise.all([
-          fetch("/api/today", { cache: "no-store" }),
-          fetch("/api/ops-status", { cache: "no-store" }),
-        ]);
-
-        const [tasksJson, statusJson] = await Promise.all([tasksRes.json(), statusRes.json()]);
-
-        if (!active) return;
-        setTasks(tasksJson.tasks || []);
-        setStatus(statusJson || EMPTY_STATUS);
-        setLastSync(new Date());
-      } catch {
-        if (active) setLastSync(new Date());
-      }
-    };
-
-    load();
-    const poll = setInterval(load, 30000);
-    return () => {
-      active = false;
-      clearInterval(poll);
-    };
+  const load = useCallback(async () => {
+    try {
+      const r = await fetch("/api/today", { cache: "no-store" });
+      setData(await r.json());
+    } catch {}
   }, []);
 
-  const grouped = useMemo(() => {
-    const priority = tasks.filter((task) => !task.done && task.priority === "priority");
-    const backlog = tasks.filter((task) => !task.done && task.priority !== "priority");
-    const done = tasks.filter((task) => task.done || task.priority === "done");
-    return { priority, backlog, done };
-  }, [tasks]);
+  useEffect(() => {
+    load();
+    const poll = setInterval(load, 30000);
+    return () => clearInterval(poll);
+  }, [load]);
 
-  const bestTask = grouped.priority[0] || grouped.backlog[0];
-
-  const toggleTask = async (task: TodayTask, group: "priority" | "backlog" | "done") => {
-    const nextDone = !task.done;
-    const nextPriority = nextDone ? "done" : group;
-
-    await fetch(`/api/today/${task.id}`, {
-      method: "PATCH",
+  const toggle = async (task: TodayTask) => {
+    await fetch("/api/today/toggle", {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ done: nextDone, priority: nextPriority }),
+      body: JSON.stringify({ lineIndex: task.lineIndex, done: !task.done }),
     });
-
-    setTasks((prev) => prev.map((item) => (item.id === task.id ? { ...item, done: nextDone, priority: nextPriority } : item)));
+    load();
   };
 
+  const addTask = async (section: string) => {
+    if (!newTask.trim()) return;
+    setAdding(true);
+    await fetch("/api/today/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: newTask.trim(), section }),
+    });
+    setNewTask("");
+    setAdding(false);
+    load();
+  };
+
+  if (!data) {
+    return <div style={{ padding: "var(--space-8)" }}><span className="t-label">Loading</span></div>;
+  }
+
+  const priority = data.sections.find(s => s.title.toUpperCase().includes("PRIORITY"));
+  const nextAction = priority?.tasks.find(t => !t.done);
+
   return (
-    <div className="p-6 grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_360px] gap-5">
-      <section className="card !p-0">
-        <div className="px-5 py-4 border-b border-[var(--border)] flex items-center justify-between">
-          <h2 className="text-[18px] text-[var(--text-primary)]">Today&apos;s Focus</h2>
-          <span className="data text-[11px] text-[var(--text-dim)]">Last synced {timeSince(lastSync)} ago</span>
-        </div>
+    <div style={{ padding: "var(--space-8)", display: "grid", gridTemplateColumns: "1fr 320px", gap: "var(--space-8)" }}>
+      {/* Main */}
+      <div>
+        <p style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-xs)", color: "var(--text-muted)", marginBottom: "var(--space-6)" }}>
+          {data.heading}
+        </p>
 
-        <div className="p-5 space-y-6">
-          <TaskGroup title="PRIORITY" accent="var(--green)" tasks={grouped.priority} onToggle={(task) => toggleTask(task, "priority")} />
-          <TaskGroup title="BACKLOG" accent="var(--text-dim)" tasks={grouped.backlog} onToggle={(task) => toggleTask(task, "backlog")} />
-          <TaskGroup title="DONE" accent="var(--text-dim)" tasks={grouped.done} done onToggle={(task) => toggleTask(task, "done")} />
-        </div>
-      </section>
+        {data.sections.map((section) => {
+          const accent = section.title.toUpperCase().includes("PRIORITY") ? "var(--red)"
+            : section.title.toUpperCase().includes("HIGH") ? "var(--accent)"
+            : section.title.toUpperCase().includes("LOGGED") || section.title.toUpperCase().includes("DONE") ? "var(--text-muted)"
+            : "var(--green)";
 
-      <aside className="space-y-4">
-        <section className="card">
-          <p className="section-title mb-2">80/20 Focus</p>
-          <p className="text-[15px] text-[var(--text-primary)] leading-relaxed">
-            {bestTask ? bestTask.task : "No priority task set. Pull one task from backlog into PRIORITY."}
-          </p>
-        </section>
+          return (
+            <div key={section.title} style={{ marginBottom: "var(--space-8)" }}>
+              <div style={{
+                display: "flex", alignItems: "center", gap: "var(--space-2)",
+                borderLeft: `2px solid ${accent}`,
+                paddingLeft: "var(--space-3)",
+                marginBottom: "var(--space-3)",
+              }}>
+                <span className="t-label">{section.emoji} {section.title}</span>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
+                  {section.tasks.length}
+                </span>
+              </div>
 
-        <section className="card">
-          <p className="section-title mb-3">Quick Stats</p>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between"><span>Trials remaining</span><span className="data text-[var(--text-primary)]">{status.activeTrials}</span></div>
-            <div className="flex items-center justify-between"><span>Oldest trial expiry</span><span className="data text-[var(--text-primary)]">{status.oldestTrialDays} days</span></div>
-            <div className="flex items-center justify-between"><span>MRR</span><span className="data text-[var(--green)]">${status.mrr.toLocaleString()}</span></div>
-          </div>
-        </section>
-
-        <section className="card">
-          <p className="section-title mb-3">Quick Links</p>
-          <div className="flex flex-col gap-2">
-            <LinkButton href="https://app.useopa.com" label="app.useopa.com" />
-            <LinkButton href="https://linear.app" label="Linear" />
-            <LinkButton href="https://app.resend.com" label="Resend" />
-          </div>
-        </section>
-      </aside>
-    </div>
-  );
-}
-
-function TaskGroup({
-  title,
-  accent,
-  tasks,
-  onToggle,
-  done,
-}: {
-  title: string;
-  accent: string;
-  tasks: TodayTask[];
-  onToggle: (task: TodayTask) => void;
-  done?: boolean;
-}) {
-  return (
-    <div>
-      <h3 className="section-title mb-3" style={{ borderLeft: `2px solid ${accent}`, paddingLeft: 8 }}>
-        {title}
-      </h3>
-      <div className="space-y-2">
-        {tasks.length === 0 && <p className="text-[13px] text-[var(--text-dim)]">No tasks.</p>}
-        {tasks.map((task) => (
-          <label
-            key={task.id}
-            className={[
-              "card !p-3.5 flex items-start gap-3 cursor-pointer",
-              task.done ? "opacity-70" : "opacity-100",
-            ].join(" ")}
-            style={{ transition: "all 200ms" }}
-          >
-            <input type="checkbox" checked={task.done} onChange={() => onToggle(task)} className="mt-1 h-4 w-4 accent-[#4ade80]" />
-            <div className="flex-1">
-              <p className={[
-                "text-[14px] transition-all",
-                task.done || done ? "line-through text-[var(--text-dim)]" : "text-[var(--text-primary)]",
-              ].join(" ")}>
-                {task.task}
-              </p>
-              {task.category && <span className="pill-gray data text-[10px] mt-1.5">{task.category}</span>}
+              <div style={{ display: "flex", flexDirection: "column", gap: "1px", background: "var(--border)" }}>
+                {section.tasks.map((task) => (
+                  <label
+                    key={task.lineIndex}
+                    style={{
+                      display: "flex", alignItems: "flex-start", gap: "var(--space-3)",
+                      padding: "var(--space-3) var(--space-4)",
+                      background: "var(--bg-elevated)",
+                      cursor: "pointer",
+                      opacity: task.done ? 0.5 : 1,
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={task.done}
+                      onChange={() => toggle(task)}
+                      style={{ marginTop: 3 }}
+                    />
+                    <span style={{
+                      fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", fontWeight: 300,
+                      color: task.done ? "var(--text-muted)" : task.inProgress ? "var(--accent)" : "var(--text-primary)",
+                      textDecoration: task.done ? "line-through" : "none",
+                      flex: 1,
+                    }}>
+                      {task.text}
+                    </span>
+                    {task.inProgress && <span className="pill pill-orange">WIP</span>}
+                  </label>
+                ))}
+                {section.tasks.length === 0 && (
+                  <div style={{ padding: "var(--space-3) var(--space-4)", background: "var(--bg-elevated)" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>Empty</span>
+                  </div>
+                )}
+              </div>
             </div>
-          </label>
-        ))}
+          );
+        })}
+      </div>
+
+      {/* Sidebar */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
+        {/* Next action */}
+        <div style={{ borderLeft: "2px solid var(--accent)", paddingLeft: "var(--space-4)" }}>
+          <span className="t-label" style={{ display: "block", marginBottom: "var(--space-2)" }}>Next action</span>
+          <p style={{
+            fontFamily: "var(--font-sans)", fontSize: "var(--text-base)", fontWeight: 400,
+            color: "var(--text-primary)", lineHeight: 1.5,
+          }}>
+            {nextAction ? nextAction.text : "All priorities clear."}
+          </p>
+        </div>
+
+        <hr className="rule" />
+
+        {/* Add task */}
+        <div>
+          <span className="t-label" style={{ display: "block", marginBottom: "var(--space-3)" }}>Add task</span>
+          <input
+            type="text"
+            className="input"
+            placeholder="What needs doing?"
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && addTask("NORMAL")}
+          />
+          <div style={{ display: "flex", gap: "var(--space-2)", marginTop: "var(--space-2)" }}>
+            <button type="button" onClick={() => addTask("PRIORITY")} disabled={!newTask.trim() || adding} className="btn btn-accent" style={{ fontSize: "var(--text-xs)", padding: "4px 10px" }}>
+              <Plus size={11} /> Priority
+            </button>
+            <button type="button" onClick={() => addTask("NORMAL")} disabled={!newTask.trim() || adding} className="btn" style={{ fontSize: "var(--text-xs)", padding: "4px 10px" }}>
+              <Plus size={11} /> Normal
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
-
-function LinkButton({ href, label }: { href: string; label: string }) {
-  return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="btn inline-flex items-center justify-between">
-      <span>{label}</span>
-      <ExternalLink size={14} />
-    </a>
-  );
-}
-
-function timeSince(date: Date | null) {
-  if (!date) return "-";
-  const secs = Math.max(0, Math.floor((Date.now() - date.getTime()) / 1000));
-  if (secs < 60) return `${secs}s`;
-  return `${Math.floor(secs / 60)}m`;
 }
