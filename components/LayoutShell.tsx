@@ -36,7 +36,7 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
 
       <Sidebar pathname={pathname} open={sidebarOpen} onClose={closeSidebar} />
       <TopBar title={TITLES[pathname] || "Mission Control"} onMenuClick={openSidebar} />
-      <main className="main-content" style={{ marginLeft: 220, paddingTop: 48, minHeight: "100vh" }}>
+      <main className="main-content" style={{ paddingTop: 48, minHeight: "100vh" }}>
         {children}
       </main>
     </div>

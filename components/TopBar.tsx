@@ -29,7 +29,7 @@ export default function TopBar({ title, onMenuClick }: TopBarProps) {
 
   return (
     <header className="topbar" style={{
-      position: "fixed", left: 220, right: 0, top: 0, height: 48, zIndex: 30,
+      position: "fixed", right: 0, top: 0, height: 48, zIndex: 30,
       borderBottom: "1px solid #27272A", background: "#09090B",
       padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between",
     }}>
