@@ -62,14 +62,7 @@ function ago(ts: number): string {
   return `${Math.floor(secs / 86400)}d ago`;
 }
 
-function statusIcon(status?: string): string {
-  if (!status) return "⏳";
-  if (status === "ok" || status === "success") return "✓";
-  if (status === "error" || status === "failed") return "✗";
-  return "●";
-}
-
-function statusColor(status?: string): string {
+function statusDotColor(status?: string): string {
   if (!status) return "var(--text-muted)";
   if (status === "ok" || status === "success") return "#22C55E";
   if (status === "error" || status === "failed") return "var(--red)";
@@ -157,17 +150,24 @@ export default function Dashboard() {
     setQuickAddSaving(false);
   };
 
+  /* ── Nav icons ── */
+  const navIcons: Record<string, string> = {
+    "/chat": "MSG",
+    "/files": "DIR",
+    "/crons": "RUN",
+    "/today": "DAY",
+  };
+
   return (
-    <div className="mobile-pad" style={{ padding: "var(--space-8)" }}>
+    <div className="mobile-pad page-content" style={{ padding: "var(--space-8)" }}>
 
       {/* ══════════ TRAFFIC LIGHT HEADER ══════════ */}
       <div style={{ marginBottom: "var(--space-6)" }}>
         <div className="dash-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-3)", gap: "var(--space-3)" }}>
-          <h1 style={{
+          <h1 className="gradient-text" style={{
             fontFamily: "var(--font-serif)",
-            fontSize: "var(--text-2xl)",
+            fontSize: "clamp(2rem, 4vw, 2.75rem)",
             letterSpacing: "-0.03em",
-            color: "var(--text-primary)",
             lineHeight: 1,
           }}>
             Mission Control
@@ -179,15 +179,15 @@ export default function Dashboard() {
 
         {/* Traffic light row */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-4)", marginTop: "var(--space-3)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#22C55E", boxShadow: greenCount > 0 ? "0 0 6px rgba(34,197,94,0.5)" : "none", display: "inline-block" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span className={greenCount > 0 ? "status-live" : ""} style={{ width: 10, height: 10, borderRadius: "50%", background: "#22C55E", boxShadow: greenCount > 0 ? "0 0 6px rgba(34,197,94,0.5)" : "none", display: "inline-block" }} />
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>{greenCount}</span>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ width: 10, height: 10, borderRadius: "50%", background: amberCount > 0 ? "#F59E0B" : "#3F3F46", boxShadow: amberCount > 0 ? "0 0 6px rgba(245,158,11,0.5)" : "none", display: "inline-block" }} />
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>{amberCount}</span>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ width: 10, height: 10, borderRadius: "50%", background: redCount > 0 ? "#EF4444" : "#3F3F46", boxShadow: redCount > 0 ? "0 0 6px rgba(239,68,68,0.5)" : "none", display: "inline-block" }} />
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>{redCount}</span>
           </div>
@@ -207,15 +207,16 @@ export default function Dashboard() {
         )}
       </div>
 
-      <hr className="rule" style={{ marginBottom: "var(--space-6)" }} />
+      {/* Separator */}
+      <hr className="rule" style={{ marginBottom: "var(--space-6)", background: "linear-gradient(90deg, var(--border), var(--accent-muted), var(--border))" }} />
 
       {/* ══════════ TOP ROW: Priorities + Needs Your Input ══════════ */}
       <div className="grid-2col-top" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-6)", marginBottom: "var(--space-6)" }}>
 
         {/* Priorities */}
-        <div>
+        <div className="card" style={{ padding: 24 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-4)" }}>
-            <span className="t-label">Priorities</span>
+            <span className="section-title" style={{ marginBottom: 0 }}>Priorities</span>
             <Link href="/today" style={{ display: "flex", alignItems: "center", gap: 2, fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
               All <ChevronRight size={10} />
             </Link>
@@ -228,9 +229,10 @@ export default function Dashboard() {
                 <div key={i} style={{
                   padding: "var(--space-3) var(--space-4)",
                   borderLeft: "2px solid var(--accent)",
-                  background: "var(--bg-elevated)",
+                  background: "rgba(255,255,255,0.015)",
+                  borderRadius: 2,
                 }}>
-                  <p style={{ fontSize: "var(--text-sm)", color: "var(--text-primary)", fontFamily: "var(--font-mono)", fontWeight: 300, lineHeight: 1.5 }}>
+                  <p style={{ fontSize: "var(--text-sm)", color: "var(--text-primary)", fontFamily: "var(--font-mono)", fontWeight: 300, lineHeight: 1.5, margin: 0 }}>
                     {task.text}
                   </p>
                 </div>
@@ -240,10 +242,10 @@ export default function Dashboard() {
         </div>
 
         {/* Needs Your Input */}
-        <div>
+        <div className="card" style={{ padding: 24 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-4)" }}>
-            <span className="t-label" style={{ color: inputItems.length > 0 ? "#F59E0B" : "var(--text-tertiary)" }}>
-              {inputItems.length > 0 ? "⚡ Needs Your Input" : "Needs Your Input"}
+            <span className="section-title" style={{ marginBottom: 0, color: inputItems.length > 0 ? "#F59E0B" : undefined }}>
+              {inputItems.length > 0 ? "Needs Your Input" : "Needs Your Input"}
             </span>
           </div>
           {inputItems.length === 0 ? (
@@ -254,9 +256,10 @@ export default function Dashboard() {
                 <div key={i} style={{
                   padding: "var(--space-3) var(--space-4)",
                   borderLeft: `2px solid ${task.inProgress ? "#F59E0B" : "var(--accent)"}`,
-                  background: "var(--bg-elevated)",
+                  background: "rgba(255,255,255,0.015)",
+                  borderRadius: 2,
                 }}>
-                  <p style={{ fontSize: "var(--text-sm)", color: "var(--text-primary)", fontFamily: "var(--font-mono)", fontWeight: 300, lineHeight: 1.5 }}>
+                  <p style={{ fontSize: "var(--text-sm)", color: "var(--text-primary)", fontFamily: "var(--font-mono)", fontWeight: 300, lineHeight: 1.5, margin: 0 }}>
                     {task.text}
                   </p>
                 </div>
@@ -270,34 +273,37 @@ export default function Dashboard() {
       <div className="grid-3col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "var(--space-6)", marginBottom: "var(--space-6)" }}>
 
         {/* Revenue Card */}
-        <div>
-          <span className="t-label" style={{ display: "block", marginBottom: "var(--space-4)" }}>Revenue</span>
-          <div style={{ padding: "var(--space-4)", background: "var(--bg-elevated)", border: "1px solid var(--border)" }}>
-            <div style={{ fontFamily: "var(--font-serif)", fontSize: "var(--text-xl)", color: "var(--text-primary)", marginBottom: "var(--space-2)" }}>
-              $0 <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>MRR</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "var(--space-2)" }}>
+        <div className="card" style={{ padding: 24 }}>
+          <span className="section-title" style={{ display: "block" }}>Revenue</span>
+          <div style={{ marginBottom: "var(--space-4)" }}>
+            <span className="number-big number-muted">
+              $0
+            </span>
+            <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontFamily: "var(--font-mono)", marginLeft: "var(--space-2)" }}>MRR</span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Trial users</span>
               <span style={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)", fontFamily: "var(--font-mono)" }}>7</span>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "var(--space-2)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Paid</span>
               <span style={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)", fontFamily: "var(--font-mono)" }}>0</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Solo Dolo</span>
-              <span style={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)", fontFamily: "var(--font-mono)" }}>—</span>
+              <span style={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)", fontFamily: "var(--font-mono)" }}>---</span>
             </div>
-            <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontFamily: "var(--font-mono)", marginTop: "var(--space-3)", borderTop: "1px solid var(--border)", paddingTop: "var(--space-2)" }}>
-              Connect Stripe to auto-update
-            </div>
+          </div>
+          <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontFamily: "var(--font-mono)", marginTop: "var(--space-3)", borderTop: "1px solid var(--border)", paddingTop: "var(--space-2)" }}>
+            Connect Stripe to auto-update
           </div>
         </div>
 
         {/* Next Runs */}
-        <div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-4)" }}>
-            <span className="t-label">Next Runs</span>
+        <div className="card" style={{ padding: 24 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-3)" }}>
+            <span className="section-title" style={{ marginBottom: 0 }}>Next Runs</span>
             <Link href="/crons" style={{ display: "flex", alignItems: "center", gap: 2, fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
               All <ChevronRight size={10} />
             </Link>
@@ -305,17 +311,14 @@ export default function Dashboard() {
           {nextCrons.length === 0 ? (
             <p style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>No scheduled jobs.</p>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "1px", background: "var(--border)" }}>
+            <div style={{ display: "flex", flexDirection: "column" }}>
               {nextCrons.map((job) => (
-                <div key={job.id} style={{
-                  display: "flex", justifyContent: "space-between", alignItems: "center",
-                  padding: "var(--space-3) var(--space-4)", background: "var(--bg-elevated)",
-                }}>
-                  <span style={{ fontSize: "var(--text-sm)", color: "var(--text-primary)", fontFamily: "var(--font-mono)", fontWeight: 300 }}>
+                <div key={job.id} className="feed-item" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                  <span style={{ fontSize: "var(--text-sm)", color: "var(--text-primary)", fontFamily: "var(--font-mono)", fontWeight: 300, flex: 1 }}>
                     {job.name}
                   </span>
-                  <span style={{ fontSize: "var(--text-xs)", color: "var(--accent)", fontFamily: "var(--font-mono)" }}>
-                    {job.state.nextRunAtMs ? relTime(job.state.nextRunAtMs) : "—"}
+                  <span style={{ fontSize: "var(--text-xs)", color: "var(--accent)", fontFamily: "var(--font-mono)", flexShrink: 0 }}>
+                    {job.state.nextRunAtMs ? relTime(job.state.nextRunAtMs) : "---"}
                   </span>
                 </div>
               ))}
@@ -324,14 +327,14 @@ export default function Dashboard() {
         </div>
 
         {/* Connected Devices */}
-        <div>
-          <span className="t-label" style={{ display: "block", marginBottom: "var(--space-4)" }}>Devices</span>
+        <div className="card" style={{ padding: 24 }}>
+          <span className="section-title" style={{ display: "block" }}>Devices</span>
           {activeDevices.length === 0 ? (
             <p style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>No active connections.</p>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
               {activeDevices.map((d, i) => (
-                <div key={i} style={{ padding: "var(--space-3) var(--space-4)", background: "var(--bg-elevated)", borderLeft: "2px solid var(--border)" }}>
+                <div key={i} style={{ padding: "var(--space-3) var(--space-4)", background: "rgba(255,255,255,0.015)", borderLeft: "2px solid var(--border)", borderRadius: 2 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ fontSize: "var(--text-sm)", color: "var(--text-primary)", fontFamily: "var(--font-mono)", fontWeight: 300 }}>
                       {d.host}
@@ -353,9 +356,9 @@ export default function Dashboard() {
       <hr className="rule" style={{ marginBottom: "var(--space-6)" }} />
 
       {/* ══════════ ACTIVITY FEED ══════════ */}
-      <div style={{ marginBottom: "var(--space-6)" }}>
+      <div className="card" style={{ padding: 24, marginBottom: "var(--space-6)" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-4)" }}>
-          <span className="t-label">Recent Activity</span>
+          <span className="section-title" style={{ marginBottom: 0 }}>Recent Activity</span>
           <Link href="/crons" style={{ display: "flex", alignItems: "center", gap: 2, fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
             All runs <ChevronRight size={10} />
           </Link>
@@ -363,17 +366,28 @@ export default function Dashboard() {
         {activity.length === 0 ? (
           <p style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>No recent activity.</p>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "1px", background: "var(--border)" }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
             {activity.slice(0, 8).map((entry, i) => {
               const ts = entry.completedAtMs || entry.startedAtMs || 0;
+              const isEven = i % 2 === 0;
               return (
-                <div key={i} style={{
-                  display: "flex", alignItems: "center", gap: "var(--space-3)",
-                  padding: "var(--space-3) var(--space-4)", background: "var(--bg-elevated)",
+                <div key={i} className="feed-item" style={{
+                  paddingLeft: "var(--space-4)", paddingRight: "var(--space-4)",
+                  background: isEven ? "rgba(255,255,255,0.01)" : "transparent",
+                  borderRadius: 2,
                 }}>
-                  <span style={{ color: statusColor(entry.status), fontSize: "var(--text-sm)", fontFamily: "var(--font-mono)", flexShrink: 0, width: 16, textAlign: "center" }}>
-                    {statusIcon(entry.status)}
-                  </span>
+                  {/* Status dot instead of emoji */}
+                  <span style={{
+                    width: 8, height: 8, borderRadius: "50%",
+                    background: statusDotColor(entry.status),
+                    boxShadow: (entry.status === "ok" || entry.status === "success")
+                      ? "0 0 6px rgba(34,197,94,0.4)"
+                      : (entry.status === "error" || entry.status === "failed")
+                        ? "0 0 6px rgba(196,48,48,0.4)"
+                        : "none",
+                    flexShrink: 0,
+                    display: "inline-block",
+                  }} />
                   <span style={{ fontSize: "var(--text-sm)", color: "var(--text-primary)", fontFamily: "var(--font-mono)", fontWeight: 300, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {entry.jobName}
                   </span>
@@ -383,7 +397,7 @@ export default function Dashboard() {
                     </span>
                   )}
                   <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontFamily: "var(--font-mono)", flexShrink: 0, minWidth: 50, textAlign: "right" }}>
-                    {ts ? ago(ts) : "—"}
+                    {ts ? ago(ts) : "---"}
                   </span>
                 </div>
               );
@@ -401,27 +415,40 @@ export default function Dashboard() {
 
       <hr className="rule" style={{ marginBottom: "var(--space-6)" }} />
 
-      {/* ══════════ QUICK ADD ══════════ */}
-      <div style={{ marginBottom: "var(--space-6)" }}>
-        <span className="t-label" style={{ display: "block", marginBottom: "var(--space-3)" }}>Quick Add</span>
-        <div style={{ display: "flex", gap: "var(--space-2)" }}>
+      {/* ══════════ QUICK ADD — floating bar ══════════ */}
+      <div className="quick-add-wrap" style={{ marginBottom: "var(--space-6)" }}>
+        <span className="section-title" style={{ display: "block" }}>Quick Add</span>
+        <div style={{ display: "flex", gap: "var(--space-3)", alignItems: "center" }}>
           <input
             ref={quickAddRef}
             className="input"
             type="text"
-            placeholder="Add a task to today.md…"
+            placeholder="Add a task to today.md..."
             value={quickAddText}
             onChange={e => setQuickAddText(e.target.value)}
             onKeyDown={e => { if (e.key === "Enter") handleQuickAdd(); }}
-            style={{ flex: 1 }}
+            style={{
+              flex: 1,
+              background: "var(--bg-subtle)",
+              border: "1px solid var(--border)",
+              borderRadius: 2,
+            }}
           />
           <button
             className="btn btn-accent"
             onClick={handleQuickAdd}
             disabled={quickAddSaving}
-            style={{ flexShrink: 0, touchAction: "manipulation" }}
+            style={{
+              flexShrink: 0,
+              touchAction: "manipulation",
+              background: "rgba(212, 85, 30, 0.12)",
+              borderColor: "var(--accent)",
+              color: "var(--accent)",
+              fontWeight: 500,
+              padding: "10px 20px",
+            }}
           >
-            {quickAddSaving ? "…" : "Add"}
+            {quickAddSaving ? "..." : "Add"}
           </button>
         </div>
       </div>
@@ -437,16 +464,27 @@ export default function Dashboard() {
           <Link
             key={item.href}
             href={item.href}
+            className="nav-card"
             style={{
-              padding: "var(--space-4) var(--space-6)",
-              border: "1px solid var(--border)", background: "var(--bg-elevated)",
-              fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)",
-              color: "var(--text-primary)", fontWeight: 300,
-              display: "flex", alignItems: "center", justifyContent: "space-between",
+              padding: "var(--space-4) var(--space-4)",
+              border: "1px solid var(--border)",
+              background: "linear-gradient(135deg, var(--bg-elevated), var(--bg-subtle))",
+              fontFamily: "var(--font-mono)",
+              color: "var(--text-primary)",
+              fontWeight: 300,
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              gap: "var(--space-2)",
+              textAlign: "center",
+              borderRadius: 2,
+              boxShadow: "0 1px 2px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2)",
             }}
           >
-            {item.label}
-            <ChevronRight size={14} style={{ color: "var(--text-muted)" }} />
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-xs)", color: "var(--accent)", letterSpacing: "0.1em", fontWeight: 500 }}>
+              {navIcons[item.href] || ""}
+            </span>
+            <span style={{ fontSize: "var(--text-sm)" }}>
+              {item.label}
+            </span>
           </Link>
         ))}
       </div>

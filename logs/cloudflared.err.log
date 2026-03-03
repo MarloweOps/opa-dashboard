@@ -1,0 +1,428 @@
+2026-02-28T08:21:03Z INF Starting tunnel tunnelID=795a28f2-ec2b-4570-9707-fcda0e1d6271
+2026-02-28T08:21:03Z INF Version 2026.2.0 (Checksum dc6e60da390e702c4db3332d0cc9cf4e98a88df99f17273e9b3d83f435695fb4)
+2026-02-28T08:21:03Z INF GOOS: darwin, GOVersion: go1.25.7, GoArch: arm64
+2026-02-28T08:21:03Z INF Settings: map[cred-file:/Users/middletonbot/.cloudflared/795a28f2-ec2b-4570-9707-fcda0e1d6271.json credentials-file:/Users/middletonbot/.cloudflared/795a28f2-ec2b-4570-9707-fcda0e1d6271.json]
+2026-02-28T08:21:03Z INF cloudflared will not automatically update if installed by a package manager.
+2026-02-28T08:21:03Z INF Generated Connector ID: a989c3eb-7a5f-4624-bec5-6ffcfb8f8733
+2026-02-28T08:21:03Z INF Initial protocol quic
+2026-02-28T08:21:03Z INF ICMP proxy will use 192.168.5.4 as source for IPv4
+2026-02-28T08:21:03Z INF ICMP proxy will use fe80::14d1:b907:24d0:252 in zone en0 as source for IPv6
+2026-02-28T08:21:03Z INF Created ICMP proxy listening on 192.168.5.4:0
+2026-02-28T08:21:03Z INF ICMP proxy will use 192.168.5.4 as source for IPv4
+2026-02-28T08:21:03Z INF ICMP proxy will use fe80::14d1:b907:24d0:252 in zone en0 as source for IPv6
+2026-02-28T08:21:03Z INF Starting metrics server on 127.0.0.1:20242/metrics
+2026-02-28T08:21:04Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.107
+2026-02-28T08:21:04Z INF Registered tunnel connection connIndex=0 connection=b6740762-e438-4e4f-86a7-64de5ef50480 event=0 ip=198.41.192.107 location=lax11 protocol=quic
+2026-02-28T08:21:04Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=1 event=0 ip=198.41.200.233
+2026-02-28T08:21:05Z INF Registered tunnel connection connIndex=1 connection=653a968e-3a16-4bb5-a373-a96f0cd813aa event=0 ip=198.41.200.233 location=lax01 protocol=quic
+2026-02-28T08:21:05Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=2 event=0 ip=198.41.192.37
+2026-02-28T08:21:06Z INF Registered tunnel connection connIndex=2 connection=5443bbab-9c21-4151-a69a-fdf0bab37044 event=0 ip=198.41.192.37 location=lax09 protocol=quic
+2026-02-28T08:21:06Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=3 event=0 ip=198.41.200.73
+2026-02-28T08:21:07Z INF Registered tunnel connection connIndex=3 connection=c8df9661-e555-417d-9127-5b55adfe871c event=0 ip=198.41.200.73 location=lax01 protocol=quic
+2026-02-28T15:32:25Z ERR failed to run the datagram handler error="write udp4 0.0.0.0:49223->198.41.200.233:7844: sendmsg: network is unreachable" connIndex=1 event=0 ip=198.41.200.233
+2026-02-28T15:32:25Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: write udp4 0.0.0.0:55320->198.41.192.37:7844: sendmsg: network is unreachable" connIndex=2 event=0 ip=198.41.192.37
+2026-02-28T15:32:25Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: write udp4 0.0.0.0:53995->198.41.200.73:7844: sendmsg: network is unreachable" connIndex=3 event=0 ip=198.41.200.73
+2026-02-28T15:32:25Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: write udp4 0.0.0.0:64063->198.41.192.107:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.107
+2026-02-28T15:32:25Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: write udp4 0.0.0.0:49223->198.41.200.233:7844: sendmsg: network is unreachable" connIndex=1 event=0 ip=198.41.200.233
+2026-02-28T15:32:25Z ERR failed to run the datagram handler error="write udp4 0.0.0.0:55320->198.41.192.37:7844: sendmsg: network is unreachable" connIndex=2 event=0 ip=198.41.192.37
+2026-02-28T15:32:25Z ERR failed to run the datagram handler error="write udp4 0.0.0.0:64063->198.41.192.107:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.107
+2026-02-28T15:32:25Z ERR failed to run the datagram handler error="write udp4 0.0.0.0:53995->198.41.200.73:7844: sendmsg: network is unreachable" connIndex=3 event=0 ip=198.41.200.73
+2026-02-28T15:32:25Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=3 event=0 ip=198.41.200.73
+2026-02-28T15:32:25Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=3 event=0 ip=198.41.200.73
+2026-02-28T15:32:25Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=1 event=0 ip=198.41.200.233
+2026-02-28T15:32:25Z INF Retrying connection in up to 1s connIndex=3 event=0 ip=198.41.200.73
+2026-02-28T15:32:25Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-02-28T15:32:25Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=1 event=0 ip=198.41.200.233
+2026-02-28T15:32:25Z INF Retrying connection in up to 1s connIndex=1 event=0 ip=198.41.200.233
+2026-02-28T15:32:25Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=2 event=0 ip=198.41.192.37
+2026-02-28T15:32:25Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-02-28T15:32:25Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.107
+2026-02-28T15:32:25Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=2 event=0 ip=198.41.192.37
+2026-02-28T15:32:25Z INF Retrying connection in up to 1s connIndex=2 event=0 ip=198.41.192.37
+2026-02-28T15:32:26Z ERR Failed to refresh protocol error="lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:56816->[::1]:53: read: connection refused"
+2026-02-28T15:32:26Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.107
+2026-02-28T15:32:26Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:64063->198.41.192.107:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.107
+2026-02-28T15:32:26Z INF Retrying connection in up to 4s connIndex=0 event=0 ip=198.41.192.107
+2026-02-28T15:32:26Z ERR Failed to refresh protocol error="lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:63900->[::1]:53: read: connection refused"
+2026-02-28T15:32:26Z ERR Connection terminated error="accept stream listener encountered a failure while serving" connIndex=1
+2026-02-28T15:32:26Z ERR Failed to refresh protocol error="lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:57660->[::1]:53: read: connection refused"
+2026-02-28T15:32:26Z ERR Connection terminated error="datagram manager encountered a failure while serving" connIndex=3
+2026-02-28T15:32:27Z ERR Failed to refresh protocol error="lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:49163->[::1]:53: read: connection refused"
+2026-02-28T15:32:27Z ERR Connection terminated error="datagram manager encountered a failure while serving" connIndex=2
+2026-02-28T15:32:29Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.7
+2026-02-28T15:32:29Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:64063->198.41.192.7:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.7
+2026-02-28T15:32:29Z INF Retrying connection in up to 8s connIndex=0 event=0 ip=198.41.192.7
+2026-02-28T15:32:36Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.107
+2026-02-28T15:32:36Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:64063->198.41.192.107:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.107
+2026-02-28T15:32:36Z INF Retrying connection in up to 16s connIndex=0 event=0 ip=198.41.192.107
+2026-02-28T15:32:37Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.67
+2026-02-28T15:32:37Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:64063->198.41.192.67:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.67
+2026-02-28T15:32:37Z INF Retrying connection in up to 32s connIndex=0 event=0 ip=198.41.192.67
+2026-02-28T15:32:43Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.57
+2026-02-28T15:32:44Z INF Registered tunnel connection connIndex=0 connection=5af053bf-0aee-42f6-af1e-5e5ca9177d4d event=0 ip=198.41.192.57 location=lax08 protocol=quic
+2026-02-28T15:32:44Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=2 event=0 ip=198.41.192.37
+2026-02-28T15:32:44Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=3 event=0 ip=198.41.200.73
+2026-02-28T15:32:44Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=1 event=0 ip=198.41.200.233
+2026-02-28T15:32:44Z INF Registered tunnel connection connIndex=1 connection=dac2fc6b-e451-41a0-badc-2dbc2dc047a5 event=0 ip=198.41.200.233 location=lax01 protocol=quic
+2026-02-28T15:32:44Z INF Registered tunnel connection connIndex=3 connection=5e0c2371-80ea-4181-87db-5971c58dbc3c event=0 ip=198.41.200.73 location=lax01 protocol=quic
+2026-02-28T15:32:44Z INF Registered tunnel connection connIndex=2 connection=a65c2fb5-3985-4edd-b078-34225c5a0b93 event=0 ip=198.41.192.37 location=lax09 protocol=quic
+2026-03-01T08:21:04Z ERR update check failed error="no release found"
+2026-03-01T12:00:34Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: write udp4 0.0.0.0:64063->198.41.192.57:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T12:00:34Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: write udp4 0.0.0.0:53995->198.41.200.73:7844: sendmsg: can't assign requested address" connIndex=3 event=0 ip=198.41.200.73
+2026-03-01T12:00:34Z ERR failed to run the datagram handler error="write udp4 0.0.0.0:64063->198.41.192.57:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T12:00:34Z ERR failed to run the datagram handler error="write udp4 0.0.0.0:53995->198.41.200.73:7844: sendmsg: can't assign requested address" connIndex=3 event=0 ip=198.41.200.73
+2026-03-01T12:00:34Z WRN failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T12:00:34Z WRN Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T12:00:34Z WRN failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=3 event=0 ip=198.41.200.73
+2026-03-01T12:00:34Z WRN Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=3 event=0 ip=198.41.200.73
+2026-03-01T12:00:34Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T12:00:34Z INF Retrying connection in up to 1s connIndex=3 event=0 ip=198.41.200.73
+2026-03-01T12:00:34Z ERR failed to run the datagram handler error="write udp4 0.0.0.0:55320->198.41.192.37:7844: sendmsg: network is unreachable" connIndex=2 event=0 ip=198.41.192.37
+2026-03-01T12:00:34Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: write udp4 0.0.0.0:55320->198.41.192.37:7844: sendmsg: network is unreachable" connIndex=2 event=0 ip=198.41.192.37
+2026-03-01T12:00:34Z WRN failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=2 event=0 ip=198.41.192.37
+2026-03-01T12:00:34Z WRN Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=2 event=0 ip=198.41.192.37
+2026-03-01T12:00:34Z INF Retrying connection in up to 1s connIndex=2 event=0 ip=198.41.192.37
+2026-03-01T12:00:34Z ERR Failed to refresh protocol error="lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:64823->[::1]:53: read: connection refused"
+2026-03-01T12:00:34Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T12:00:34Z WRN Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:64063->198.41.192.57:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T12:00:34Z INF Retrying connection in up to 4s connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T12:00:34Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: write udp4 0.0.0.0:49223->198.41.200.233:7844: sendmsg: network is unreachable" connIndex=1 event=0 ip=198.41.200.233
+2026-03-01T12:00:34Z ERR failed to run the datagram handler error="write udp4 0.0.0.0:49223->198.41.200.233:7844: sendmsg: network is unreachable" connIndex=1 event=0 ip=198.41.200.233
+2026-03-01T12:00:34Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=1 event=0 ip=198.41.200.233
+2026-03-01T12:00:34Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=1 event=0 ip=198.41.200.233
+2026-03-01T12:00:34Z INF Retrying connection in up to 1s connIndex=1 event=0 ip=198.41.200.233
+2026-03-01T12:00:34Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.167
+2026-03-01T12:00:34Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:64063->198.41.192.167:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.167
+2026-03-01T12:00:34Z INF Retrying connection in up to 8s connIndex=0 event=0 ip=198.41.192.167
+2026-03-01T12:00:35Z ERR Failed to refresh protocol error="lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:57099->[::1]:53: read: connection refused"
+2026-03-01T12:00:35Z ERR Connection terminated error="accept stream listener encountered a failure while serving" connIndex=1
+2026-03-01T12:00:35Z ERR Failed to refresh protocol error="lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:64998->[::1]:53: read: connection refused"
+2026-03-01T12:00:35Z ERR Connection terminated error="accept stream listener encountered a failure while serving" connIndex=3
+2026-03-01T12:00:36Z ERR Failed to refresh protocol error="lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:50965->[::1]:53: read: connection refused"
+2026-03-01T12:00:36Z ERR Connection terminated error="datagram manager encountered a failure while serving" connIndex=2
+2026-03-01T12:00:36Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.107
+2026-03-01T12:00:36Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:64063->198.41.192.107:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.107
+2026-03-01T12:00:36Z INF Retrying connection in up to 16s connIndex=0 event=0 ip=198.41.192.107
+2026-03-01T12:00:43Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=1 event=0 ip=198.41.200.233
+2026-03-01T12:00:43Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=2 event=0 ip=198.41.192.37
+2026-03-01T12:00:43Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=3 event=0 ip=198.41.200.73
+2026-03-01T12:00:43Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:55320->198.41.192.37:7844: sendmsg: network is unreachable" connIndex=2 event=0 ip=198.41.192.37
+2026-03-01T12:00:43Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:49223->198.41.200.233:7844: sendmsg: network is unreachable" connIndex=1 event=0 ip=198.41.200.233
+2026-03-01T12:00:43Z INF Retrying connection in up to 4s connIndex=2 event=0 ip=198.41.192.37
+2026-03-01T12:00:43Z INF Retrying connection in up to 4s connIndex=1 event=0 ip=198.41.200.233
+2026-03-01T12:00:43Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:53995->198.41.200.73:7844: sendmsg: network is unreachable" connIndex=3 event=0 ip=198.41.200.73
+2026-03-01T12:00:43Z INF Retrying connection in up to 4s connIndex=3 event=0 ip=198.41.200.73
+2026-03-01T12:00:44Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.67
+2026-03-01T12:00:44Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:64063->198.41.192.67:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.67
+2026-03-01T12:00:44Z INF Retrying connection in up to 32s connIndex=0 event=0 ip=198.41.192.67
+2026-03-01T12:00:45Z ERR Connection terminated error="failed to dial to edge with quic: write udp4 0.0.0.0:55320->198.41.192.37:7844: sendmsg: network is unreachable" connIndex=2
+2026-03-01T12:00:45Z ERR Connection terminated error="failed to dial to edge with quic: write udp4 0.0.0.0:49223->198.41.200.233:7844: sendmsg: network is unreachable" connIndex=1
+2026-03-01T12:00:47Z ERR Connection terminated error="failed to dial to edge with quic: write udp4 0.0.0.0:53995->198.41.200.73:7844: sendmsg: network is unreachable" connIndex=3
+2026-03-01T12:00:54Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=2 event=0 ip=198.41.192.107
+2026-03-01T12:00:54Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T12:00:54Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=1 event=0 ip=198.41.200.113
+2026-03-01T12:00:54Z INF Registered tunnel connection connIndex=3 connection=e72d7498-d01d-482d-9394-086a6bae0154 event=0 ip=198.41.200.233 location=lax01 protocol=quic
+2026-03-01T12:00:54Z INF Registered tunnel connection connIndex=1 connection=6f04f0f0-073b-4318-848d-99626585c6e2 event=0 ip=198.41.200.113 location=lax01 protocol=quic
+2026-03-01T12:00:54Z INF Registered tunnel connection connIndex=2 connection=da04a158-1b0b-4bca-afb4-49f2d1dd9e17 event=0 ip=198.41.192.107 location=lax07 protocol=quic
+2026-03-01T12:01:02Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T12:01:02Z INF Registered tunnel connection connIndex=0 connection=bcca4c38-662c-4e29-9461-cc9849d71f34 event=0 ip=198.41.192.57 location=lax08 protocol=quic
+2026-03-01T12:01:13Z ERR failed to run the datagram handler error="Application error 0x0 (remote)" connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T12:01:13Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: Application error 0x0 (remote)" connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T12:01:13Z WRN failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T12:01:13Z WRN Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T12:01:13Z INF Retrying connection in up to 1s connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T12:01:13Z WRN Connection terminated error="datagram manager encountered a failure while serving" connIndex=3
+2026-03-01T12:01:48Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T12:01:48Z INF Registered tunnel connection connIndex=3 connection=62d1693f-cef8-4200-87e1-38fa4703d8cf event=0 ip=198.41.200.233 location=lax01 protocol=quic
+2026-03-01T20:48:38Z ERR failed to run the datagram handler error="write udp4 0.0.0.0:64063->198.41.192.57:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T20:48:38Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: write udp4 0.0.0.0:64063->198.41.192.57:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T20:48:38Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: write udp4 0.0.0.0:53995->198.41.200.233:7844: sendmsg: can't assign requested address" connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T20:48:38Z ERR failed to run the datagram handler error="write udp4 0.0.0.0:49223->198.41.200.113:7844: sendmsg: network is unreachable" connIndex=1 event=0 ip=198.41.200.113
+2026-03-01T20:48:38Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: write udp4 0.0.0.0:49223->198.41.200.113:7844: sendmsg: network is unreachable" connIndex=1 event=0 ip=198.41.200.113
+2026-03-01T20:48:38Z ERR failed to run the datagram handler error="write udp4 0.0.0.0:53995->198.41.200.233:7844: sendmsg: can't assign requested address" connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T20:48:38Z ERR failed to run the datagram handler error="write udp4 0.0.0.0:55320->198.41.192.107:7844: sendmsg: network is unreachable" connIndex=2 event=0 ip=198.41.192.107
+2026-03-01T20:48:38Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: write udp4 0.0.0.0:55320->198.41.192.107:7844: sendmsg: network is unreachable" connIndex=2 event=0 ip=198.41.192.107
+2026-03-01T20:48:38Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=2 event=0 ip=198.41.192.107
+2026-03-01T20:48:38Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=2 event=0 ip=198.41.192.107
+2026-03-01T20:48:38Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T20:48:38Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=1 event=0 ip=198.41.200.113
+2026-03-01T20:48:38Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=1 event=0 ip=198.41.200.113
+2026-03-01T20:48:38Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T20:48:38Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T20:48:38Z INF Retrying connection in up to 1s connIndex=1 event=0 ip=198.41.200.113
+2026-03-01T20:48:38Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T20:48:38Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T20:48:38Z INF Retrying connection in up to 1s connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T20:48:38Z INF Retrying connection in up to 1s connIndex=2 event=0 ip=198.41.192.107
+2026-03-01T20:48:39Z ERR Failed to refresh protocol error="lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:63825->[::1]:53: read: connection refused"
+2026-03-01T20:48:39Z ERR Connection terminated error="accept stream listener encountered a failure while serving" connIndex=3
+2026-03-01T20:48:39Z ERR Failed to refresh protocol error="lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:49589->[::1]:53: read: connection refused"
+2026-03-01T20:48:39Z ERR Connection terminated error="datagram manager encountered a failure while serving" connIndex=2
+2026-03-01T20:48:40Z ERR Failed to refresh protocol error="lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:53986->[::1]:53: read: connection refused"
+2026-03-01T20:48:40Z ERR Connection terminated error="datagram manager encountered a failure while serving" connIndex=1
+2026-03-01T20:48:40Z ERR Failed to refresh protocol error="lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:57561->[::1]:53: read: connection refused"
+2026-03-01T20:48:40Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T20:48:40Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:64063->198.41.192.57:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T20:48:40Z INF Retrying connection in up to 4s connIndex=0 event=0 ip=198.41.192.57
+2026-03-01T20:48:40Z ERR Failed to refresh protocol error="lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:49592->[::1]:53: read: connection refused"
+2026-03-01T20:48:40Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.67
+2026-03-01T20:48:40Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:64063->198.41.192.67:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.67
+2026-03-01T20:48:40Z INF Retrying connection in up to 8s connIndex=0 event=0 ip=198.41.192.67
+2026-03-01T20:48:41Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=1 event=0 ip=198.41.200.113
+2026-03-01T20:48:41Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=2 event=0 ip=198.41.192.107
+2026-03-01T20:48:41Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T20:48:41Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:49223->198.41.200.113:7844: sendmsg: network is unreachable" connIndex=1 event=0 ip=198.41.200.113
+2026-03-01T20:48:41Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:55320->198.41.192.107:7844: sendmsg: network is unreachable" connIndex=2 event=0 ip=198.41.192.107
+2026-03-01T20:48:41Z INF Retrying connection in up to 4s connIndex=1 event=0 ip=198.41.200.113
+2026-03-01T20:48:41Z INF Retrying connection in up to 4s connIndex=2 event=0 ip=198.41.192.107
+2026-03-01T20:48:41Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:53995->198.41.200.233:7844: sendmsg: network is unreachable" connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T20:48:41Z INF Retrying connection in up to 4s connIndex=3 event=0 ip=198.41.200.233
+2026-03-01T20:48:42Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.27
+2026-03-01T20:48:42Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:64063->198.41.192.27:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.27
+2026-03-01T20:48:42Z INF Retrying connection in up to 16s connIndex=0 event=0 ip=198.41.192.27
+2026-03-01T20:48:43Z ERR Connection terminated error="failed to dial to edge with quic: write udp4 0.0.0.0:55320->198.41.192.107:7844: sendmsg: network is unreachable" connIndex=2
+2026-03-01T20:48:44Z ERR Connection terminated error="failed to dial to edge with quic: write udp4 0.0.0.0:53995->198.41.200.233:7844: sendmsg: network is unreachable" connIndex=3
+2026-03-01T20:48:44Z ERR Connection terminated error="failed to dial to edge with quic: write udp4 0.0.0.0:49223->198.41.200.113:7844: sendmsg: network is unreachable" connIndex=1
+2026-03-01T20:48:50Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.47
+2026-03-01T20:48:50Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:64063->198.41.192.47:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.47
+2026-03-01T20:48:50Z INF Retrying connection in up to 32s connIndex=0 event=0 ip=198.41.192.47
+2026-03-01T20:48:51Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=1 event=0 ip=198.41.200.33
+2026-03-01T20:48:51Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=2 event=0 ip=198.41.192.227
+2026-03-01T20:48:51Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=3 event=0 ip=198.41.200.43
+2026-03-01T20:48:51Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:49223->198.41.200.33:7844: sendmsg: network is unreachable" connIndex=1 event=0 ip=198.41.200.33
+2026-03-01T20:48:51Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:53995->198.41.200.43:7844: sendmsg: network is unreachable" connIndex=3 event=0 ip=198.41.200.43
+2026-03-01T20:48:51Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:55320->198.41.192.227:7844: sendmsg: network is unreachable" connIndex=2 event=0 ip=198.41.192.227
+2026-03-01T20:48:51Z INF Retrying connection in up to 8s connIndex=1 event=0 ip=198.41.200.33
+2026-03-01T20:48:51Z INF Retrying connection in up to 8s connIndex=3 event=0 ip=198.41.200.43
+2026-03-01T20:48:51Z INF Retrying connection in up to 8s connIndex=2 event=0 ip=198.41.192.227
+2026-03-01T20:48:53Z ERR Connection terminated error="failed to dial to edge with quic: write udp4 0.0.0.0:53995->198.41.200.43:7844: sendmsg: network is unreachable" connIndex=3
+2026-03-01T20:48:57Z ERR Connection terminated error="failed to dial to edge with quic: write udp4 0.0.0.0:49223->198.41.200.33:7844: sendmsg: network is unreachable" connIndex=1
+2026-03-01T20:48:58Z ERR Connection terminated error="failed to dial to edge with quic: write udp4 0.0.0.0:55320->198.41.192.227:7844: sendmsg: network is unreachable" connIndex=2
+2026-03-01T20:49:00Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=2 event=0 ip=198.41.192.37
+2026-03-01T20:49:00Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=1 event=0 ip=198.41.200.233
+2026-03-01T20:49:00Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=3 event=0 ip=198.41.200.33
+2026-03-01T20:49:01Z INF Registered tunnel connection connIndex=1 connection=9dfa134a-3e2d-48ee-bd0f-32524a425c45 event=0 ip=198.41.200.233 location=lax01 protocol=quic
+2026-03-01T20:49:01Z INF Registered tunnel connection connIndex=3 connection=4e3de96e-0f56-4647-b190-b01c0cc7704c event=0 ip=198.41.200.33 location=lax01 protocol=quic
+2026-03-01T20:49:01Z INF Registered tunnel connection connIndex=2 connection=1e4f9933-ea91-4e81-8e33-2f991298a278 event=0 ip=198.41.192.37 location=lax09 protocol=quic
+2026-03-01T20:49:19Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.107
+2026-03-01T20:49:19Z INF Registered tunnel connection connIndex=0 connection=a521308b-c87e-4848-a3e6-34fc3357b9e4 event=0 ip=198.41.192.107 location=lax11 protocol=quic
+2026-03-02T03:51:26Z ERR Failed to refresh DNS local resolver error="lookup region1.v2.argotunnel.com: i/o timeout"
+2026-03-02T08:21:04Z ERR update check failed error="no release found"
+2026-03-03T02:44:19Z INF Initiating graceful shutdown due to signal terminated ...
+2026-03-03T02:44:19Z ERR failed to run the datagram handler error="Application error 0x0 (remote)" connIndex=1 event=0 ip=198.41.200.233
+2026-03-03T02:44:19Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.192.107
+2026-03-03T02:44:19Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-03-03T02:44:19Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-03-03T02:44:19Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=1 event=0 ip=198.41.200.233
+2026-03-03T02:44:19Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.107
+2026-03-03T02:44:19Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=1 event=0 ip=198.41.200.233
+2026-03-03T02:44:19Z INF Retrying connection in up to 1s connIndex=1 event=0 ip=198.41.200.233
+2026-03-03T02:44:19Z ERR Connection terminated connIndex=0
+2026-03-03T02:44:19Z ERR Connection terminated connIndex=1
+2026-03-03T02:44:19Z ERR failed to run the datagram handler error="Application error 0x0 (remote)" connIndex=2 event=0 ip=198.41.192.37
+2026-03-03T02:44:19Z ERR failed to run the datagram handler error="context canceled" connIndex=3 event=0 ip=198.41.200.33
+2026-03-03T02:44:19Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=2 event=0 ip=198.41.192.37
+2026-03-03T02:44:19Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=3 event=0 ip=198.41.200.33
+2026-03-03T02:44:19Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=2 event=0 ip=198.41.192.37
+2026-03-03T02:44:19Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=3 event=0 ip=198.41.200.33
+2026-03-03T02:44:19Z INF Retrying connection in up to 1s connIndex=2 event=0 ip=198.41.192.37
+2026-03-03T02:44:19Z INF Retrying connection in up to 1s connIndex=3 event=0 ip=198.41.200.33
+2026-03-03T02:44:19Z ERR Connection terminated connIndex=2
+2026-03-03T02:44:19Z ERR Connection terminated connIndex=3
+2026-03-03T02:44:19Z ERR no more connections active and exiting
+2026-03-03T02:44:19Z INF Tunnel server stopped
+2026-03-03T02:44:19Z INF icmp router terminated error="read udp 192.168.5.4:0: raw-read udp 192.168.5.4:0: use of closed network connection"
+2026-03-03T02:44:19Z INF Metrics server stopped
+2026-03-03T02:44:19Z INF Starting tunnel tunnelID=795a28f2-ec2b-4570-9707-fcda0e1d6271
+2026-03-03T02:44:19Z INF Version 2026.2.0 (Checksum dc6e60da390e702c4db3332d0cc9cf4e98a88df99f17273e9b3d83f435695fb4)
+2026-03-03T02:44:19Z INF GOOS: darwin, GOVersion: go1.25.7, GoArch: arm64
+2026-03-03T02:44:19Z INF Settings: map[cred-file:/Users/middletonbot/.cloudflared/795a28f2-ec2b-4570-9707-fcda0e1d6271.json credentials-file:/Users/middletonbot/.cloudflared/795a28f2-ec2b-4570-9707-fcda0e1d6271.json]
+2026-03-03T02:44:19Z INF cloudflared will not automatically update if installed by a package manager.
+2026-03-03T02:44:19Z INF Generated Connector ID: 27c32d98-f4d8-4b3c-ab78-462bcca81c70
+2026-03-03T02:44:19Z INF Initial protocol quic
+2026-03-03T02:44:19Z INF ICMP proxy will use 192.168.5.4 as source for IPv4
+2026-03-03T02:44:19Z INF ICMP proxy will use fe80::14d1:b907:24d0:252 in zone en0 as source for IPv6
+2026-03-03T02:44:19Z INF Created ICMP proxy listening on 192.168.5.4:0
+2026-03-03T02:44:20Z INF ICMP proxy will use 192.168.5.4 as source for IPv4
+2026-03-03T02:44:20Z INF ICMP proxy will use fe80::14d1:b907:24d0:252 in zone en0 as source for IPv6
+2026-03-03T02:44:20Z INF Starting metrics server on 127.0.0.1:20242/metrics
+2026-03-03T02:44:20Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.200.53
+2026-03-03T02:44:20Z INF Registered tunnel connection connIndex=0 connection=a4004d73-25a7-44c3-880c-43b50a88b8c4 event=0 ip=198.41.200.53 location=lax01 protocol=quic
+2026-03-03T02:44:20Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=1 event=0 ip=198.41.192.67
+2026-03-03T02:44:20Z INF Registered tunnel connection connIndex=1 connection=646f1b6c-b42b-4b11-ac8e-ce8db9c2934c event=0 ip=198.41.192.67 location=lax10 protocol=quic
+2026-03-03T02:44:21Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=2 event=0 ip=198.41.192.107
+2026-03-03T02:44:21Z INF Registered tunnel connection connIndex=2 connection=4f53846b-67f0-4e1c-aace-76d1724c3448 event=0 ip=198.41.192.107 location=lax09 protocol=quic
+2026-03-03T02:44:22Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=3 event=0 ip=198.41.200.63
+2026-03-03T02:44:22Z INF Registered tunnel connection connIndex=3 connection=e175ccf9-e6dd-4d76-bbd3-3339e5cf67ad event=0 ip=198.41.200.63 location=lax06 protocol=quic
+2026-03-03T04:47:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/today event=0 ip=198.41.200.63 type=http
+2026-03-03T04:47:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/activity?limit=15 event=0 ip=198.41.200.63 type=http
+2026-03-03T04:47:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/agents?_rsc=1r34m event=0 ip=198.41.200.63 type=http
+2026-03-03T04:47:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/crons?_rsc=1r34m event=0 ip=198.41.200.63 type=http
+2026-03-03T04:47:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/outreach?_rsc=1r34m event=0 ip=198.41.200.63 type=http
+2026-03-03T04:47:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/today?_rsc=1r34m event=0 ip=198.41.200.63 type=http
+2026-03-03T04:47:23Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:23Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:23Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:47:23Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:47:40Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:40Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:47:40Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:40Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:47:40Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:40Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:40Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/today event=0 ip=198.41.200.63 type=http
+2026-03-03T04:47:40Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/crons event=0 ip=198.41.200.63 type=http
+2026-03-03T04:47:41Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:41Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/activity?limit=15 event=0 ip=198.41.200.63 type=http
+2026-03-03T04:47:59Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:59Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:47:59Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:47:59Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:21Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:21Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:41Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:41Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:41Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:41Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:41Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:41Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/activity?limit=15 event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:41Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:41Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:41Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/presence event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:41Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/crons event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:41Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:41Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/today event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:47Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:47Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:47Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:47Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:52Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:52Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:52Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:52Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:52Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:52Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:52Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/crons event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:52Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:52Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/activity?limit=15 event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:52Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/presence event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:52Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:52Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:52Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:52Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/today event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:53Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:53Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:48:53Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:48:53Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/crons event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/today event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/presence event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/activity?limit=15 event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:14Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:14Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/today?_rsc=1r34m event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:14Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:14Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:14Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:14Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/files?_rsc=1r34m event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:14Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/crons?_rsc=1r34m event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:14Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/chat?_rsc=1r34m event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:23Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:23Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:23Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:23Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:38Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:38Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:38Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:38Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:38Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:38Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/activity?limit=15 event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:38Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:38Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:38Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:38Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/today event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:38Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:38Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:38Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/crons event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:38Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/presence event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:53Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:53Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:49:53Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:49:53Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/activity?limit=15 event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/crons event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/today event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/presence event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:23Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:23Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:23Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:23Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:38Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:38Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:38Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:38Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/activity?limit=15 event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:38Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:38Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:38Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:38Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:38Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:38Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:38Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:38Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/crons event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:38Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/today event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:38Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/presence event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:53Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:53Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:50:53Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:50:53Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:51:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:51:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/presence event=0 ip=198.41.200.63 type=http
+2026-03-03T04:51:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:51:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:51:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/crons event=0 ip=198.41.200.63 type=http
+2026-03-03T04:51:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:51:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:51:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:51:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:51:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/today event=0 ip=198.41.200.63 type=http
+2026-03-03T04:51:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:51:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:51:08Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:51:08Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/activity?limit=15 event=0 ip=198.41.200.63 type=http
+2026-03-03T04:51:19Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:51:19Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/outreach?_rsc=1r34m event=0 ip=198.41.200.63 type=http
+2026-03-03T04:51:19Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:51:19Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:51:19Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/crons?_rsc=1r34m event=0 ip=198.41.200.63 type=http
+2026-03-03T04:51:19Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/agents?_rsc=1r34m event=0 ip=198.41.200.63 type=http
+2026-03-03T04:51:19Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:51:19Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/?_rsc=1r34m event=0 ip=198.41.200.63 type=http
+2026-03-03T04:51:23Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:51:23Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http
+2026-03-03T04:51:23Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=3 event=1 ingressRule=0 originService=http://localhost:3001
+2026-03-03T04:51:23Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=3 dest=https://mission.thevaried.co/api/gateway/health event=0 ip=198.41.200.63 type=http

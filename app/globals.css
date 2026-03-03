@@ -145,16 +145,45 @@ a {
    COMPONENTS
    ============================================================ */
 
-/* Cards — minimal, border only */
+/* Cards — elevated with depth */
 .card {
-  background: var(--bg-elevated);
+  background: linear-gradient(135deg, var(--bg-elevated), var(--bg-subtle));
   border: 1px solid var(--border);
   border-radius: 2px;
   padding: var(--space-6);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
 }
 
 .card:hover {
-  border-color: var(--text-muted);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  border-color: var(--border-subtle);
+}
+
+/* Glassmorphism card variant */
+.card-glass {
+  background: linear-gradient(135deg, rgba(17,17,19,0.9), rgba(24,24,27,0.7));
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Gradient text for headers */
+.gradient-text {
+  background: linear-gradient(135deg, var(--text-primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Section title style — premium uppercase mono accent */
+.section-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: var(--space-3);
 }
 
 /* Section labels */
@@ -178,29 +207,80 @@ a {
 
 /* Status indicators */
 .status-live {
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--green);
   box-shadow: 0 0 6px rgba(212, 85, 30, 0.5);
   display: inline-block;
+  animation: livePulse 2s ease-in-out infinite;
 }
 
 .status-offline {
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--text-muted);
   display: inline-block;
 }
 
 .status-error {
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--red);
   box-shadow: 0 0 6px rgba(196, 48, 48, 0.6);
   display: inline-block;
+}
+
+/* Animated pulse for live status */
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(212, 85, 30, 0.4); }
+  50% { box-shadow: 0 0 12px rgba(212, 85, 30, 0.8); }
+}
+
+/* Activity feed item */
+.feed-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background 150ms ease;
+  min-height: 44px;
+}
+.feed-item:hover {
+  background: rgba(255,255,255,0.02);
+}
+.feed-item:last-child {
+  border-bottom: none;
+}
+
+/* Number highlight */
+.number-big {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+.number-glow {
+  text-shadow: 0 0 20px rgba(212, 85, 30, 0.3);
+}
+.number-glow-green {
+  text-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+}
+.number-muted {
+  color: var(--text-muted);
+}
+
+/* Smooth page transitions */
+.page-content {
+  animation: fadeIn 300ms ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Pills — functional only */
@@ -293,7 +373,9 @@ a {
 }
 
 .input:focus, .textarea:focus {
-  border-color: var(--text-muted);
+  border-color: var(--accent-muted);
+  box-shadow: 0 0 0 2px rgba(212, 85, 30, 0.15);
+  outline: none;
 }
 
 .input::placeholder, .textarea::placeholder {
@@ -310,6 +392,16 @@ a {
 /* Checkbox styling */
 input[type="checkbox"] {
   accent-color: var(--accent);
+}
+
+/* Nav card — hover glow + scale */
+.nav-card {
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+.nav-card:hover {
+  transform: scale(1.02);
+  border-color: var(--accent-muted);
+  box-shadow: 0 0 12px rgba(212, 85, 30, 0.1);
 }
 
 /* ============================================================
@@ -470,6 +562,29 @@ input[type="checkbox"] {
   .dash-header {
     flex-wrap: wrap !important;
     gap: var(--space-2) !important;
+  }
+
+  /* Quick add — sticky bottom on mobile */
+  .quick-add-wrap {
+    position: sticky !important;
+    bottom: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 20 !important;
+    background: var(--bg) !important;
+    padding: var(--space-4) !important;
+    margin-left: calc(-1 * var(--space-4)) !important;
+    margin-right: calc(-1 * var(--space-4)) !important;
+    border-top: 1px solid var(--border) !important;
+  }
+
+  /* Feed items — proper touch targets */
+  .feed-item {
+    min-height: 44px !important;
+    padding: var(--space-3) var(--space-4) !important;
+  }
+
+  /* Quick nav — full width cards */
+  .nav-card {
+    min-height: 44px !important;
   }
 
   /* Crons job rows — stack on mobile */
