@@ -404,6 +404,11 @@ input[type="checkbox"] {
     padding: var(--space-4) !important;
   }
 
+  /* Dashboard 2-col top row -> single column */
+  .grid-2col-top {
+    grid-template-columns: 1fr !important;
+  }
+
   /* Dashboard 3-col grid -> single column */
   .grid-3col {
     grid-template-columns: 1fr !important;
