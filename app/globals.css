@@ -145,27 +145,66 @@ a {
    COMPONENTS
    ============================================================ */
 
-/* Cards — elevated with depth */
+/* Cards — glassmorphism */
 .card {
-  background: linear-gradient(135deg, var(--bg-elevated), var(--bg-subtle));
-  border: 1px solid var(--border);
-  border-radius: 2px;
+  background: rgba(17, 17, 19, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
   padding: var(--space-6);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.04);
   transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
 }
 
 .card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-  border-color: var(--border-subtle);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Glassmorphism card variant */
-.card-glass {
-  background: linear-gradient(135deg, rgba(17,17,19,0.9), rgba(24,24,27,0.7));
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.05);
+/* Ambient page background — gives blur something to work with */
+.glass-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.glass-bg::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  top: -100px;
+  right: -150px;
+  background: radial-gradient(circle, rgba(212, 85, 30, 0.08) 0%, transparent 70%);
+  animation: ambientDrift 20s ease-in-out infinite alternate;
+}
+
+.glass-bg::after {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  bottom: 10%;
+  left: -100px;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.05) 0%, transparent 70%);
+  animation: ambientDrift 25s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes ambientDrift {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, -30px) scale(1.15); }
+}
+
+/* Separator with glass treatment */
+.rule-glass {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  border: none;
 }
 
 /* Gradient text for headers */
@@ -245,12 +284,14 @@ a {
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
   transition: background 150ms ease;
   min-height: 44px;
+  border-radius: 8px;
+  margin-bottom: 2px;
 }
 .feed-item:hover {
-  background: rgba(255,255,255,0.02);
+  background: rgba(255,255,255,0.03);
 }
 .feed-item:last-child {
   border-bottom: none;
@@ -283,18 +324,20 @@ a {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Pills — functional only */
+/* Pills — glass */
 .pill {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  border-radius: 2px;
-  padding: 2px 8px;
+  border-radius: 20px;
+  padding: 3px 10px;
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   font-weight: 400;
   letter-spacing: 0.04em;
   border: 1px solid;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .pill-green {
@@ -321,25 +364,29 @@ a {
   background: transparent;
 }
 
-/* Buttons */
+/* Buttons — glass */
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border-radius: 2px;
-  padding: 8px 14px;
+  border-radius: 10px;
+  padding: 8px 16px;
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   font-weight: 400;
-  border: 1px solid var(--border);
-  background: var(--bg-subtle);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(24, 24, 27, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--text-primary);
   cursor: pointer;
-  transition: border-color 120ms ease;
+  transition: all 150ms ease;
 }
 
 .btn:hover {
-  border-color: var(--text-muted);
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(24, 24, 27, 0.8);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .btn:disabled {
@@ -348,33 +395,37 @@ a {
 }
 
 .btn-accent {
-  border-color: var(--accent-muted);
+  border-color: rgba(212, 85, 30, 0.3);
   color: var(--accent);
-  background: rgba(212, 85, 30, 0.06);
+  background: rgba(212, 85, 30, 0.1);
 }
 
 .btn-accent:hover {
-  border-color: var(--accent);
+  border-color: rgba(212, 85, 30, 0.5);
+  background: rgba(212, 85, 30, 0.15);
+  box-shadow: 0 4px 16px rgba(212, 85, 30, 0.1);
 }
 
-/* Inputs */
+/* Inputs — glass */
 .input, .textarea {
   width: 100%;
-  border-radius: 2px;
-  border: 1px solid var(--border);
-  background: var(--bg);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(9, 9, 11, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--text-primary);
-  padding: 10px 12px;
+  padding: 10px 14px;
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   font-weight: 300;
   outline: none;
-  transition: border-color 120ms ease;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 
 .input:focus, .textarea:focus {
-  border-color: var(--accent-muted);
-  box-shadow: 0 0 0 2px rgba(212, 85, 30, 0.15);
+  border-color: rgba(212, 85, 30, 0.4);
+  box-shadow: 0 0 0 3px rgba(212, 85, 30, 0.1), 0 0 20px rgba(212, 85, 30, 0.05);
   outline: none;
 }
 
@@ -394,14 +445,20 @@ input[type="checkbox"] {
   accent-color: var(--accent);
 }
 
-/* Nav card — hover glow + scale */
+/* Nav card — glass hover */
 .nav-card {
+  background: rgba(17, 17, 19, 0.5) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.04) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
   transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
 }
 .nav-card:hover {
-  transform: scale(1.02);
-  border-color: var(--accent-muted);
-  box-shadow: 0 0 12px rgba(212, 85, 30, 0.1);
+  transform: scale(1.03);
+  border-color: rgba(212, 85, 30, 0.25) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 20px rgba(212, 85, 30, 0.08) !important;
 }
 
 /* ============================================================
@@ -870,8 +927,10 @@ input[type="checkbox"] {
   right: 0;
   height: calc(56px + env(safe-area-inset-bottom, 0px));
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  background: #09090B;
-  border-top: 1px solid #27272A;
+  background: rgba(9, 9, 11, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   z-index: 50;
   align-items: center;
   justify-content: space-around;

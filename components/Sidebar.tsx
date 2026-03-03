@@ -70,7 +70,10 @@ export default function Sidebar({ pathname, open, onClose }: SidebarProps) {
       style={{
         position: "fixed", left: 0, top: 0, bottom: 0, width: 220, zIndex: 40,
         display: "flex", flexDirection: "column",
-        background: "#09090B", borderRight: "1px solid #27272A",
+        background: "rgba(9, 9, 11, 0.85)",
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
+        borderRight: "1px solid rgba(255, 255, 255, 0.06)",
       }}
     >
       {/* Wordmark + close button on mobile */}
@@ -101,7 +104,7 @@ export default function Sidebar({ pathname, open, onClose }: SidebarProps) {
         </button>
       </div>
 
-      <div style={{ height: 1, background: "#27272A" }} />
+      <div style={{ height: 1, background: "rgba(255, 255, 255, 0.06)" }} />
 
       {/* Nav */}
       <nav style={{ padding: "12px 0", flex: 1 }}>
@@ -128,7 +131,7 @@ export default function Sidebar({ pathname, open, onClose }: SidebarProps) {
         })}
       </nav>
 
-      <div style={{ height: 1, background: "#27272A" }} />
+      <div style={{ height: 1, background: "rgba(255, 255, 255, 0.06)" }} />
 
       {/* Status */}
       <div style={{ padding: "16px 24px", display: "flex", alignItems: "center", gap: 8 }}>

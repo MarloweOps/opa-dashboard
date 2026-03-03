@@ -30,7 +30,10 @@ export default function TopBar({ title, onMenuClick }: TopBarProps) {
   return (
     <header className="topbar" style={{
       position: "fixed", right: 0, top: 0, height: 48, zIndex: 30,
-      borderBottom: "1px solid #27272A", background: "#09090B",
+      borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+      background: "rgba(9, 9, 11, 0.75)",
+      backdropFilter: "blur(20px)",
+      WebkitBackdropFilter: "blur(20px)",
       padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between",
     }}>
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -54,11 +57,11 @@ export default function TopBar({ title, onMenuClick }: TopBarProps) {
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
         <span style={{
           display: "inline-flex", alignItems: "center", gap: 4,
-          padding: "2px 8px", fontSize: 12,
+          padding: "3px 10px", fontSize: 11, borderRadius: 20,
           fontFamily: "'DM Mono', monospace", fontWeight: 400,
           letterSpacing: "0.04em",
           color: online ? "#D4551E" : "#C43030",
-          border: `1px solid ${online ? "#8C3A15" : "#7A2222"}`,
+          border: `1px solid ${online ? "rgba(212,85,30,0.25)" : "rgba(196,48,48,0.25)"}`,
           background: online ? "rgba(212,85,30,0.08)" : "rgba(196,48,48,0.08)",
         }}>
           {online ? "Gateway" : "Offline"}
@@ -66,12 +69,12 @@ export default function TopBar({ title, onMenuClick }: TopBarProps) {
 
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <span style={{
-            width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center",
+            width: 24, height: 24, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
             background: "#D4551E", color: "#09090B", fontSize: 11, fontWeight: 600,
             fontFamily: "'DM Mono', monospace",
           }}>B</span>
           <span style={{
-            width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center",
+            width: 24, height: 24, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
             background: "#A1A1AA", color: "#09090B", fontSize: 11, fontWeight: 600,
             fontFamily: "'DM Mono', monospace",
           }}>M</span>

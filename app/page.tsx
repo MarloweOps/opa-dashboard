@@ -159,7 +159,10 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="mobile-pad page-content" style={{ padding: "var(--space-8)" }}>
+    <div className="mobile-pad page-content" style={{ padding: "var(--space-8)", position: "relative" }}>
+
+      {/* Ambient background glow for glassmorphism */}
+      <div className="glass-bg" />
 
       {/* ══════════ TRAFFIC LIGHT HEADER ══════════ */}
       <div style={{ marginBottom: "var(--space-6)" }}>
@@ -180,15 +183,15 @@ export default function Dashboard() {
         {/* Traffic light row */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-4)", marginTop: "var(--space-3)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span className={greenCount > 0 ? "status-live" : ""} style={{ width: 10, height: 10, borderRadius: "50%", background: "#22C55E", boxShadow: greenCount > 0 ? "0 0 6px rgba(34,197,94,0.5)" : "none", display: "inline-block" }} />
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#22C55E", boxShadow: greenCount > 0 ? "0 0 8px rgba(34,197,94,0.6)" : "none", display: "inline-block" }} />
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>{greenCount}</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: amberCount > 0 ? "#F59E0B" : "#3F3F46", boxShadow: amberCount > 0 ? "0 0 6px rgba(245,158,11,0.5)" : "none", display: "inline-block" }} />
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: amberCount > 0 ? "#F59E0B" : "#3F3F46", boxShadow: amberCount > 0 ? "0 0 8px rgba(245,158,11,0.6)" : "none", display: "inline-block" }} />
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>{amberCount}</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: redCount > 0 ? "#EF4444" : "#3F3F46", boxShadow: redCount > 0 ? "0 0 6px rgba(239,68,68,0.5)" : "none", display: "inline-block" }} />
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: redCount > 0 ? "#EF4444" : "#3F3F46", boxShadow: redCount > 0 ? "0 0 8px rgba(239,68,68,0.6)" : "none", display: "inline-block" }} />
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>{redCount}</span>
           </div>
           <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-xs)", color: "var(--text-muted)", marginLeft: "auto" }}>
@@ -208,7 +211,7 @@ export default function Dashboard() {
       </div>
 
       {/* Separator */}
-      <hr className="rule" style={{ marginBottom: "var(--space-6)", background: "linear-gradient(90deg, var(--border), var(--accent-muted), var(--border))" }} />
+      <hr className="rule-glass" style={{ marginBottom: "var(--space-6)" }} />
 
       {/* ══════════ TOP ROW: Priorities + Needs Your Input ══════════ */}
       <div className="grid-2col-top" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-6)", marginBottom: "var(--space-6)" }}>
@@ -229,8 +232,8 @@ export default function Dashboard() {
                 <div key={i} style={{
                   padding: "var(--space-3) var(--space-4)",
                   borderLeft: "2px solid var(--accent)",
-                  background: "rgba(255,255,255,0.015)",
-                  borderRadius: 2,
+                  background: "rgba(255,255,255,0.02)",
+                  borderRadius: 8,
                 }}>
                   <p style={{ fontSize: "var(--text-sm)", color: "var(--text-primary)", fontFamily: "var(--font-mono)", fontWeight: 300, lineHeight: 1.5, margin: 0 }}>
                     {task.text}
@@ -245,7 +248,7 @@ export default function Dashboard() {
         <div className="card" style={{ padding: 24 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-4)" }}>
             <span className="section-title" style={{ marginBottom: 0, color: inputItems.length > 0 ? "#F59E0B" : undefined }}>
-              {inputItems.length > 0 ? "Needs Your Input" : "Needs Your Input"}
+              Needs Your Input
             </span>
           </div>
           {inputItems.length === 0 ? (
@@ -256,8 +259,8 @@ export default function Dashboard() {
                 <div key={i} style={{
                   padding: "var(--space-3) var(--space-4)",
                   borderLeft: `2px solid ${task.inProgress ? "#F59E0B" : "var(--accent)"}`,
-                  background: "rgba(255,255,255,0.015)",
-                  borderRadius: 2,
+                  background: "rgba(255,255,255,0.02)",
+                  borderRadius: 8,
                 }}>
                   <p style={{ fontSize: "var(--text-sm)", color: "var(--text-primary)", fontFamily: "var(--font-mono)", fontWeight: 300, lineHeight: 1.5, margin: 0 }}>
                     {task.text}
@@ -334,7 +337,7 @@ export default function Dashboard() {
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
               {activeDevices.map((d, i) => (
-                <div key={i} style={{ padding: "var(--space-3) var(--space-4)", background: "rgba(255,255,255,0.015)", borderLeft: "2px solid var(--border)", borderRadius: 2 }}>
+                <div key={i} style={{ padding: "var(--space-3) var(--space-4)", background: "rgba(255,255,255,0.02)", borderLeft: "2px solid rgba(255,255,255,0.08)", borderRadius: 8 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ fontSize: "var(--text-sm)", color: "var(--text-primary)", fontFamily: "var(--font-mono)", fontWeight: 300 }}>
                       {d.host}
@@ -353,7 +356,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <hr className="rule" style={{ marginBottom: "var(--space-6)" }} />
+      <hr className="rule-glass" style={{ marginBottom: "var(--space-6)" }} />
 
       {/* ══════════ ACTIVITY FEED ══════════ */}
       <div className="card" style={{ padding: 24, marginBottom: "var(--space-6)" }}>
@@ -406,14 +409,14 @@ export default function Dashboard() {
         )}
       </div>
 
-      <hr className="rule" style={{ marginBottom: "var(--space-6)" }} />
+      <hr className="rule-glass" style={{ marginBottom: "var(--space-6)" }} />
 
       {/* ══════════ THE VARIED HQ ══════════ */}
       <div style={{ marginBottom: "var(--space-6)" }}>
         <VariedHQ />
       </div>
 
-      <hr className="rule" style={{ marginBottom: "var(--space-6)" }} />
+      <hr className="rule-glass" style={{ marginBottom: "var(--space-6)" }} />
 
       {/* ══════════ QUICK ADD — floating bar ══════════ */}
       <div className="quick-add-wrap" style={{ marginBottom: "var(--space-6)" }}>
@@ -429,9 +432,6 @@ export default function Dashboard() {
             onKeyDown={e => { if (e.key === "Enter") handleQuickAdd(); }}
             style={{
               flex: 1,
-              background: "var(--bg-subtle)",
-              border: "1px solid var(--border)",
-              borderRadius: 2,
             }}
           />
           <button
@@ -441,9 +441,6 @@ export default function Dashboard() {
             style={{
               flexShrink: 0,
               touchAction: "manipulation",
-              background: "rgba(212, 85, 30, 0.12)",
-              borderColor: "var(--accent)",
-              color: "var(--accent)",
               fontWeight: 500,
               padding: "10px 20px",
             }}
@@ -467,16 +464,12 @@ export default function Dashboard() {
             className="nav-card"
             style={{
               padding: "var(--space-4) var(--space-4)",
-              border: "1px solid var(--border)",
-              background: "linear-gradient(135deg, var(--bg-elevated), var(--bg-subtle))",
               fontFamily: "var(--font-mono)",
               color: "var(--text-primary)",
               fontWeight: 300,
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
               gap: "var(--space-2)",
               textAlign: "center",
-              borderRadius: 2,
-              boxShadow: "0 1px 2px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2)",
             }}
           >
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-xs)", color: "var(--accent)", letterSpacing: "0.1em", fontWeight: 500 }}>
