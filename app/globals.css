@@ -737,3 +737,71 @@ input[type="checkbox"] {
   background: var(--border);
   border-radius: 2px;
 }
+
+/* ============================================================
+   BOTTOM NAVIGATION — Mobile only
+   ============================================================ */
+
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(56px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: #09090B;
+  border-top: 1px solid #27272A;
+  z-index: 50;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex: 1;
+  height: 56px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: color 120ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottom-nav-item.active {
+  color: var(--accent);
+}
+
+@media (max-width: 768px) {
+  .bottom-nav {
+    display: flex;
+  }
+
+  /* Add bottom padding so content isn't hidden behind bottom nav */
+  .main-content {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Hide hamburger — bottom nav replaces it */
+  .hamburger-btn {
+    display: none !important;
+  }
+
+  /* Pokemon cards: compact on mobile */
+  .pokemon-card {
+    min-height: 340px;
+    padding: 14px;
+  }
+
+  /* Reduce avatar area height on mobile */
+  .pokemon-card .pokemon-avatar-area {
+    height: 100px !important;
+  }
+}

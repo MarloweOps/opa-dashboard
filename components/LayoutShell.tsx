@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import TopBar from "@/components/TopBar";
+import BottomNav from "@/components/BottomNav";
 
 const TITLES: Record<string, string> = {
   "/": "Dashboard",
@@ -40,6 +41,7 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
       <main className="main-content" style={{ paddingTop: 48, minHeight: "100vh" }}>
         {children}
       </main>
+      <BottomNav pathname={pathname} />
     </div>
   );
 }

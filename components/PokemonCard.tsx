@@ -111,7 +111,7 @@ export default function PokemonCard({ agent, status = "idle" }: PokemonCardProps
       </div>
 
       {/* Avatar area */}
-      <div style={{
+      <div className="pokemon-avatar-area" style={{
         width: "100%",
         height: 160,
         display: "flex",
