@@ -466,3 +466,174 @@ input[type="checkbox"] {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* ============================================================
+   POKEMON CARD SYSTEM
+   ============================================================ */
+
+/* Card grid layout */
+.pokemon-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6);
+}
+
+@media (max-width: 1100px) {
+  .pokemon-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .pokemon-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .pokemon-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Base card */
+.pokemon-card {
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+  min-height: 420px;
+  margin: 0 auto;
+  padding: 16px;
+  border-radius: 12px;
+  border: 2px solid var(--agent-color, var(--border));
+  background: var(--bg-elevated);
+  overflow: hidden;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  cursor: default;
+}
+
+.pokemon-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 12px var(--agent-color-20, transparent);
+  border-color: var(--agent-color, var(--border));
+  filter: brightness(1.05);
+}
+
+/* Opus tier: gold border + holographic shimmer */
+.pokemon-card-opus {
+  border-color: #D4A855;
+  box-shadow: 0 0 8px rgba(212,168,85,0.15);
+}
+
+.pokemon-card-opus:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 20px rgba(212,168,85,0.25);
+}
+
+/* Sonnet tier: silver metallic border */
+.pokemon-card-sonnet {
+  border-color: #71717A;
+  box-shadow: 0 0 4px rgba(113,113,122,0.1);
+}
+
+.pokemon-card-sonnet:hover {
+  border-color: #A1A1AA;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 12px rgba(161,161,170,0.15);
+}
+
+/* Haiku tier: clean, bronze-tinted border */
+.pokemon-card-haiku {
+  border-color: #52525B;
+}
+
+/* Holographic overlay for Opus cards */
+.pokemon-card-holo {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: linear-gradient(
+    125deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,220,150,0.06) 20%,
+    rgba(255,180,100,0.04) 40%,
+    rgba(255,255,255,0) 50%,
+    rgba(200,220,255,0.06) 60%,
+    rgba(150,200,255,0.04) 80%,
+    rgba(255,255,255,0) 100%
+  );
+  background-size: 200% 200%;
+  animation: holoShimmer 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes holoShimmer {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+/* Tier badges */
+.pokemon-tier-badge {
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.pokemon-tier-opus {
+  color: #D4A855;
+  background: rgba(212,168,85,0.12);
+  border: 1px solid rgba(212,168,85,0.3);
+  text-shadow: 0 0 8px rgba(212,168,85,0.3);
+}
+
+.pokemon-tier-sonnet {
+  color: #A1A1AA;
+  background: rgba(161,161,170,0.1);
+  border: 1px solid rgba(161,161,170,0.25);
+}
+
+.pokemon-tier-haiku {
+  color: #CD7F32;
+  background: rgba(205,127,50,0.1);
+  border: 1px solid rgba(205,127,50,0.2);
+}
+
+/* Status pulse animation */
+.pokemon-status-pulse {
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Agent avatar circles on dashboard */
+.agent-avatar-circle:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 12px rgba(255,255,255,0.15);
+}
+
+/* Scrollbar for avatar row */
+.agents-avatar-row {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.agents-avatar-row::-webkit-scrollbar {
+  height: 4px;
+}
+
+.agents-avatar-row::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.agents-avatar-row::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}

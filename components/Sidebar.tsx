@@ -9,11 +9,13 @@ import {
   CheckSquare,
   Users,
   Timer,
+  Bot,
   X,
 } from "@/components/icons";
 
 const NAV = [
   { href: "/", label: "Dashboard", Icon: LayoutDashboard },
+  { href: "/agents", label: "Agents", Icon: Bot },
   { href: "/chat", label: "Chat", Icon: MessageSquare },
   { href: "/files", label: "Files", Icon: FolderOpen },
   { href: "/crons", label: "Automations", Icon: Timer },
