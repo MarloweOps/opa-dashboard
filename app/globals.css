@@ -67,6 +67,7 @@
 html, body {
   margin: 0;
   min-height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -325,6 +326,11 @@ input[type="checkbox"] {
   margin-left: var(--sidebar-w);
 }
 
+/* Today page: 2 columns on desktop */
+.grid-today {
+  grid-template-columns: 1fr 320px;
+}
+
 /* ============================================================
    MOBILE RESPONSIVE — Breakpoint at 768px
    ============================================================ */
@@ -449,6 +455,68 @@ input[type="checkbox"] {
   .chat-bubble {
     max-width: 90% !important;
   }
+
+  /* Agents page — reduce padding on mobile */
+  .agents-page-wrap {
+    padding: var(--space-4) !important;
+  }
+
+  /* Dashboard header — allow wrapping */
+  .dash-header {
+    flex-wrap: wrap !important;
+    gap: var(--space-2) !important;
+  }
+
+  /* Crons job rows — stack on mobile */
+  .cron-job-row {
+    flex-wrap: wrap !important;
+  }
+
+  .cron-job-actions {
+    width: 100% !important;
+    justify-content: flex-start !important;
+    margin-top: var(--space-2) !important;
+  }
+
+  /* Today page sidebar layout */
+  .today-sidebar {
+    order: -1 !important;
+  }
+
+  /* Touch-friendly minimum tap targets for interactive elements */
+  .btn {
+    min-height: 44px;
+    padding: 10px 14px !important;
+  }
+
+  /* Ensure checkboxes have accessible tap areas */
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Select dropdowns — accessible height */
+  select {
+    min-height: 44px;
+  }
+
+  /* Chat input area — reduce side padding */
+  .chat-input-wrap {
+    padding-left: var(--space-3) !important;
+    padding-right: var(--space-3) !important;
+  }
+
+  /* Outreach filter row */
+  .outreach-filters {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: var(--space-2);
+  }
+
+  /* Prevent iOS zoom on input focus (requires >= 16px) */
+  .input, .textarea, input, textarea, select {
+    font-size: 16px !important;
+  }
 }
 
 /* Extra small screens */
@@ -464,6 +532,14 @@ input[type="checkbox"] {
 
   .grid-cron-status {
     grid-template-columns: 1fr !important;
+  }
+
+  .pokemon-grid {
+    gap: var(--space-3);
+  }
+
+  .agents-page-wrap {
+    padding: var(--space-3) !important;
   }
 }
 
@@ -493,6 +569,7 @@ input[type="checkbox"] {
 @media (max-width: 500px) {
   .pokemon-grid {
     grid-template-columns: 1fr;
+    gap: var(--space-4);
   }
 }
 
@@ -512,11 +589,33 @@ input[type="checkbox"] {
   cursor: default;
 }
 
+/* On small screens, cards go full width */
+@media (max-width: 768px) {
+  .pokemon-card {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .pokemon-card {
+    padding: 12px;
+    min-height: 380px;
+  }
+}
+
 .pokemon-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 12px var(--agent-color-20, transparent);
   border-color: var(--agent-color, var(--border));
   filter: brightness(1.05);
+}
+
+/* Disable hover float on touch devices — prevents sticky hover states */
+@media (hover: none) {
+  .pokemon-card:hover {
+    transform: none;
+    filter: none;
+  }
 }
 
 /* Opus tier: gold border + holographic shimmer */
@@ -623,6 +722,7 @@ input[type="checkbox"] {
 .agents-avatar-row {
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
+  -webkit-overflow-scrolling: touch;
 }
 
 .agents-avatar-row::-webkit-scrollbar {

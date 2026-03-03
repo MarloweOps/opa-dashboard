@@ -88,7 +88,7 @@ export default function FilesPage() {
   };
 
   return (
-    <div style={{ padding: "var(--space-8)" }}>
+    <div className="mobile-pad" style={{ padding: "var(--space-8)" }}>
       {/* Toolbar */}
       <div className="files-toolbar" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-4)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: "var(--font-mono)", fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>

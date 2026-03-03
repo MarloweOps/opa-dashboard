@@ -61,13 +61,16 @@ export default function PokemonCard({ agent, status = "idle" }: PokemonCardProps
       />
 
       {/* Header: name + HP */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, position: "relative", zIndex: 2 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, position: "relative", zIndex: 2, gap: 8 }}>
         <span style={{
           fontFamily: "var(--font-serif)",
           fontSize: 18,
           fontWeight: 400,
           color: "var(--text-primary)",
           letterSpacing: "-0.02em",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
         }}>
           {agent.name}
         </span>
@@ -79,6 +82,7 @@ export default function PokemonCard({ agent, status = "idle" }: PokemonCardProps
           display: "flex",
           alignItems: "center",
           gap: 4,
+          flexShrink: 0,
         }}>
           <HeartIcon color={agent.color} />
           {agent.hp}
@@ -86,7 +90,7 @@ export default function PokemonCard({ agent, status = "idle" }: PokemonCardProps
       </div>
 
       {/* Type badges */}
-      <div style={{ display: "flex", gap: 6, marginBottom: 12, position: "relative", zIndex: 2 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12, position: "relative", zIndex: 2 }}>
         {agent.types.map((type) => (
           <span
             key={type}
@@ -172,6 +176,7 @@ export default function PokemonCard({ agent, status = "idle" }: PokemonCardProps
           fontWeight: 300,
           color: "var(--text-muted)",
           lineHeight: 1.4,
+          wordBreak: "break-word",
         }}>
           {agent.ability.description}
         </div>

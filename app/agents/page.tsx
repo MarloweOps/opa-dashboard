@@ -11,7 +11,7 @@ const TIER_SECTIONS = [
 
 export default function AgentsPage() {
   return (
-    <div style={{ padding: "var(--space-8)", maxWidth: 1400, margin: "0 auto" }}>
+    <div className="agents-page-wrap" style={{ padding: "var(--space-8)", maxWidth: 1400, margin: "0 auto" }}>
       {/* Page header */}
       <div style={{ textAlign: "center", marginBottom: "var(--space-12)" }}>
         <h1 style={{

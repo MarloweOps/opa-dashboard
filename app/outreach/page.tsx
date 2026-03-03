@@ -79,7 +79,7 @@ export default function OutreachPage() {
 
   return (
     <div className="p-6 space-y-4 pb-24">
-      <header className="flex flex-wrap items-center gap-2">
+      <header className="outreach-filters flex flex-wrap items-center gap-2">
         <button type="button" onClick={() => setFilter("all")} className={filter === "all" ? "pill-green" : "pill-gray"}>All</button>
         {(["not_started", "messaged", "responded", "converted"] as ContactStatus[]).map((status) => (
           <button

@@ -55,7 +55,7 @@ export default function TodayPage() {
   const nextAction = priority?.tasks.find(t => !t.done);
 
   return (
-    <div className="grid-today" style={{ padding: "var(--space-8)", display: "grid", gridTemplateColumns: "1fr 320px", gap: "var(--space-8)" }}>
+    <div className="grid-today mobile-pad" style={{ padding: "var(--space-8)", display: "grid", gap: "var(--space-8)" }}>
       {/* Main */}
       <div>
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-xs)", color: "var(--text-muted)", marginBottom: "var(--space-6)" }}>
@@ -123,7 +123,7 @@ export default function TodayPage() {
       </div>
 
       {/* Sidebar */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
+      <div className="today-sidebar" style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
         {/* Next action */}
         <div style={{ borderLeft: "2px solid var(--accent)", paddingLeft: "var(--space-4)" }}>
           <span className="t-label" style={{ display: "block", marginBottom: "var(--space-2)" }}>Next action</span>

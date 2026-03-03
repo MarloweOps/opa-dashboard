@@ -149,7 +149,7 @@ export default function ChatPage() {
       </div>
 
       {/* Input */}
-      <div style={{ padding: "var(--space-4) var(--space-6)", borderTop: "1px solid var(--border)" }}>
+      <div className="chat-input-wrap" style={{ padding: "var(--space-4) var(--space-6)", borderTop: "1px solid var(--border)" }}>
         <div style={{ display: "flex", gap: "var(--space-3)", alignItems: "flex-end" }}>
           <textarea
             ref={textRef}

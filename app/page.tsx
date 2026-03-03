@@ -77,10 +77,10 @@ export default function Dashboard() {
   const activeDevices = devices.filter(d => d.reason !== "disconnect");
 
   return (
-    <div style={{ padding: "var(--space-8)" }}>
+    <div className="mobile-pad" style={{ padding: "var(--space-8)" }}>
       {/* Header */}
       <div style={{ marginBottom: "var(--space-10)" }}>
-        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "var(--space-3)" }}>
+        <div className="dash-header" style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "var(--space-3)" }}>
           <h1 style={{
             fontFamily: "var(--font-serif)",
             fontSize: "var(--text-2xl)",

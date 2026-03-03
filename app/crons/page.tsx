@@ -109,7 +109,7 @@ export default function CronsPage() {
   }
 
   return (
-    <div style={{ padding: "var(--space-8)" }}>
+    <div className="mobile-pad" style={{ padding: "var(--space-8)" }}>
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "var(--space-6)" }}>
         <span className="t-label">
           {loading ? "Loading" : `${jobs.filter(j => j.enabled).length} active / ${jobs.length} total`}
@@ -120,7 +120,7 @@ export default function CronsPage() {
         {jobs.map((job) => (
           <div key={job.id} style={{ border: "1px solid var(--border)", background: "var(--bg-elevated)" }}>
             {/* Main row */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "var(--space-4) var(--space-6)" }}>
+            <div className="cron-job-row" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "var(--space-4) var(--space-6)", gap: "var(--space-3)" }}>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
                   <span style={{ fontFamily: "var(--font-tech)", fontSize: "var(--text-base)", fontWeight: 600, color: "var(--text-primary)" }}>
@@ -136,7 +136,7 @@ export default function CronsPage() {
                 </div>
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", flexShrink: 0 }}>
+              <div className="cron-job-actions" style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", flexShrink: 0 }}>
                 <button type="button" onClick={() => handleRun(job.id)} disabled={running.has(job.id)} className="btn btn-accent" style={{ padding: "6px 12px", fontSize: "var(--text-xs)" }}>
                   <Play size={11} />
                   {running.has(job.id) ? "Running" : "Run"}

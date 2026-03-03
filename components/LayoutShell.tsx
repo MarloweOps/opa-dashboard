@@ -7,6 +7,7 @@ import TopBar from "@/components/TopBar";
 
 const TITLES: Record<string, string> = {
   "/": "Dashboard",
+  "/agents": "Agents",
   "/chat": "Chat",
   "/files": "Files",
   "/crons": "Automations",
