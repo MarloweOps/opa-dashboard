@@ -11,12 +11,19 @@ export default function LoginPage() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const input = form.querySelector("input") as HTMLInputElement;
+    const value = input?.value || pw;
+    if (!value) {
+      setErr(true);
+      return;
+    }
     setLoading(true);
     setErr(false);
     const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password: pw }),
+      body: JSON.stringify({ password: value }),
     });
     if (res.ok) {
       router.push("/");
@@ -67,7 +74,7 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            disabled={loading || !pw}
+            disabled={loading}
             className="btn btn-accent"
             style={{ width: "100%", justifyContent: "center", marginTop: "var(--space-2)" }}
           >
