@@ -1,66 +1,76 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { AGENT_ROSTER, Agent } from "@/lib/agents";
 import Link from "next/link";
 
-/* ─── Room layout (percentage-based coordinates) ─── */
-interface Room {
-  id: string;
-  label: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  icon: string;
+/* ─── Layout constants (percentage-based) ─── */
+const WORLD_PAD = 3; // % padding from edges for perimeter positions
+const OFFICE = { x: 25, y: 22, w: 50, h: 56 }; // center rectangle
+
+/* ─── Perimeter slot generation ─── */
+function generatePerimeterSlots(count: number): { x: number; y: number }[] {
+  // Distribute agents evenly around the perimeter (top, right, bottom, left walls)
+  const slots: { x: number; y: number }[] = [];
+  const topY = WORLD_PAD + 2;
+  const botY = 100 - WORLD_PAD - 8;
+  const leftX = WORLD_PAD + 2;
+  const rightX = 100 - WORLD_PAD - 2;
+
+  // Perimeter: top edge, right edge, bottom edge, left edge
+  const perimeterPoints: { x: number; y: number }[] = [];
+
+  // Top wall — spread across x
+  for (let i = 0; i < 5; i++) {
+    perimeterPoints.push({ x: 8 + i * 20, y: topY + Math.random() * 3 });
+  }
+  // Bottom wall
+  for (let i = 0; i < 5; i++) {
+    perimeterPoints.push({ x: 8 + i * 20, y: botY - Math.random() * 3 });
+  }
+  // Left wall
+  for (let i = 0; i < 3; i++) {
+    perimeterPoints.push({ x: leftX + Math.random() * 3, y: 20 + i * 25 });
+  }
+  // Right wall
+  for (let i = 0; i < 3; i++) {
+    perimeterPoints.push({ x: rightX - Math.random() * 3, y: 20 + i * 25 });
+  }
+
+  // Shuffle and return enough slots
+  const shuffled = perimeterPoints.sort(() => Math.random() - 0.5);
+  for (let i = 0; i < count; i++) {
+    slots.push(shuffled[i % shuffled.length]);
+  }
+  return slots;
 }
 
-const ROOMS: Room[] = [
-  { id: "command",     label: "COMMAND CENTER", x: 33, y: 0,  w: 34, h: 28, icon: "⚡" },
-  { id: "research",    label: "RESEARCH",       x: 0,  y: 0,  w: 31, h: 28, icon: "🔍" },
-  { id: "revenue",     label: "REVENUE LAB",    x: 69, y: 0,  w: 31, h: 28, icon: "💰" },
-  { id: "content",     label: "CONTENT",        x: 69, y: 36, w: 31, h: 27, icon: "✍️" },
-  { id: "engineering", label: "ENGINEERING",     x: 0,  y: 36, w: 31, h: 27, icon: "⚙️" },
-  { id: "security",    label: "SECURITY",        x: 0,  y: 71, w: 31, h: 29, icon: "🛡️" },
-  { id: "outreach",    label: "OUTREACH",        x: 69, y: 71, w: 31, h: 29, icon: "📡" },
-];
-
-const CORRIDOR = { x: 33, y: 30, w: 34, h: 70 };
-
-/* ─── Agent-to-room mapping ─── */
-const AGENT_HOME: Record<string, string> = {
-  Marlowe: "command",
-  Middleton: "revenue",
-  Chapman: "research",
-  Heywood: "content",
-  Kyd: "content",
-  Dekker: "content",
-  Beaumont: "outreach",
-  Webster: "engineering",
-  Fletcher: "engineering",
-  Jonson: "command",
-  Marston: "research",
-  Tourneur: "security",
-  Greene: "research",
-  Nash: "outreach",
-  Ford: "engineering",
-  Massinger: "revenue",
-};
-
-/* ─── Helpers ─── */
-function getRoom(id: string): Room | undefined {
-  return ROOMS.find((r) => r.id === id);
+function randomPerimeterPos(): { x: number; y: number } {
+  const wall = Math.floor(Math.random() * 4);
+  const jitter = () => Math.random() * 4 - 2;
+  switch (wall) {
+    case 0: // top
+      return { x: 8 + Math.random() * 84, y: WORLD_PAD + 2 + jitter() };
+    case 1: // bottom
+      return { x: 8 + Math.random() * 84, y: 92 - WORLD_PAD + jitter() };
+    case 2: // left
+      return { x: WORLD_PAD + 2 + jitter(), y: 12 + Math.random() * 76 };
+    case 3: // right
+    default:
+      return { x: 98 - WORLD_PAD + jitter(), y: 12 + Math.random() * 76 };
+  }
 }
 
-function randomInRoom(room: { x: number; y: number; w: number; h: number }) {
+function randomOfficePos(): { x: number; y: number } {
   const px = 6;
   const py = 8;
   return {
-    x: room.x + px + Math.random() * Math.max(1, room.w - px * 2),
-    y: room.y + py + Math.random() * Math.max(1, room.h - py * 2),
+    x: OFFICE.x + px + Math.random() * Math.max(1, OFFICE.w - px * 2),
+    y: OFFICE.y + py + Math.random() * Math.max(1, OFFICE.h - py * 2),
   };
 }
 
+/* ─── Color helpers ─── */
 function lighten(hex: string, amt: number): string {
   const n = parseInt(hex.replace("#", ""), 16);
   const r = Math.min(255, (n >> 16) + amt);
@@ -82,15 +92,17 @@ function Sprite({
   agent,
   walkFrame,
   glow,
+  active,
 }: {
   agent: Agent;
   walkFrame: number;
   glow?: boolean;
+  active?: boolean;
 }) {
   const head = lighten(agent.color, 20);
   const body = agent.color;
   const legs = darken(agent.color, 45);
-  const f = walkFrame % 2;
+  const f = active ? walkFrame % 2 : 0; // idle agents stand still
 
   return (
     <div
@@ -100,8 +112,11 @@ function Sprite({
         alignItems: "center",
         filter: glow
           ? `drop-shadow(0 0 6px ${agent.color}80)`
-          : "drop-shadow(0 1px 2px rgba(0,0,0,0.6))",
+          : active
+            ? `drop-shadow(0 0 4px ${agent.color}50)`
+            : "drop-shadow(0 1px 2px rgba(0,0,0,0.6))",
         transition: "filter 200ms ease",
+        opacity: active ? 1 : 0.55,
       }}
     >
       {/* Head */}
@@ -185,7 +200,7 @@ function Sprite({
   );
 }
 
-/* ─── Furniture pieces (small pixel decorations per room) ─── */
+/* ─── Furniture pieces ─── */
 function Desk({ x, y }: { x: number; y: number }) {
   return (
     <div
@@ -235,14 +250,15 @@ function Server({ x, y }: { x: number; y: number }) {
 
 /* ─── Main component ─── */
 export default function VariedHQ() {
-  /* Positions: { agentName: {x, y} } */
+  const [activeAgents, setActiveAgents] = useState<Set<string>>(new Set());
   const [positions, setPositions] = useState<
     Record<string, { x: number; y: number }>
   >(() => {
+    // Start everyone on perimeter
     const init: Record<string, { x: number; y: number }> = {};
-    AGENT_ROSTER.forEach((a) => {
-      const room = getRoom(AGENT_HOME[a.name] || "command");
-      if (room) init[a.name] = randomInRoom(room);
+    const slots = generatePerimeterSlots(AGENT_ROSTER.length);
+    AGENT_ROSTER.forEach((a, i) => {
+      init[a.name] = slots[i];
     });
     return init;
   });
@@ -250,13 +266,100 @@ export default function VariedHQ() {
   const [frame, setFrame] = useState(0);
   const [hovered, setHovered] = useState<string | null>(null);
 
+  /* Poll activity to determine active agents */
+  const pollActivity = useCallback(async () => {
+    try {
+      const res = await fetch("/api/activity?limit=30", { cache: "no-store" });
+      const data = await res.json();
+      const entries = data.activity || [];
+
+      // Agent is "active" if their name appears in a recent job (within last 5 minutes)
+      // or if the job is currently running
+      const now = Date.now();
+      const recentThreshold = 5 * 60 * 1000; // 5 minutes
+      const active = new Set<string>();
+
+      const agentNames = AGENT_ROSTER.map((a) => a.name.toLowerCase());
+
+      for (const entry of entries) {
+        const jobName = (entry.jobName || "").toLowerCase();
+        const ts = entry.completedAtMs || entry.startedAtMs || 0;
+        const isRecent = now - ts < recentThreshold;
+        const isRunning = entry.status === "running";
+
+        if (isRecent || isRunning) {
+          // Try to match agent name in the job name
+          for (const name of agentNames) {
+            if (jobName.includes(name)) {
+              active.add(
+                AGENT_ROSTER.find(
+                  (a) => a.name.toLowerCase() === name
+                )!.name
+              );
+            }
+          }
+        }
+      }
+
+      // If no agents matched from activity, randomly activate 2-4 agents
+      // to keep the visualization interesting
+      if (active.size === 0) {
+        const shuffled = [...AGENT_ROSTER].sort(() => Math.random() - 0.5);
+        const count = 2 + Math.floor(Math.random() * 3);
+        shuffled.slice(0, count).forEach((a) => active.add(a.name));
+      }
+
+      setActiveAgents(active);
+    } catch {
+      // On error, randomly activate a few agents
+      const shuffled = [...AGENT_ROSTER].sort(() => Math.random() - 0.5);
+      const count = 2 + Math.floor(Math.random() * 3);
+      const active = new Set<string>();
+      shuffled.slice(0, count).forEach((a) => active.add(a.name));
+      setActiveAgents(active);
+    }
+  }, []);
+
+  useEffect(() => {
+    pollActivity();
+    const id = setInterval(pollActivity, 30000);
+    return () => clearInterval(id);
+  }, [pollActivity]);
+
   /* Walk-cycle frame toggle (300ms) */
   useEffect(() => {
     const id = setInterval(() => setFrame((f) => f + 1), 300);
     return () => clearInterval(id);
   }, []);
 
-  /* Staggered movement: move 3-5 random agents every ~2.5s */
+  /* Move agents based on active state */
+  useEffect(() => {
+    // Immediately position agents based on active state
+    setPositions((prev) => {
+      const next = { ...prev };
+      AGENT_ROSTER.forEach((agent) => {
+        if (activeAgents.has(agent.name)) {
+          // Move to office
+          next[agent.name] = randomOfficePos();
+        } else {
+          // Move to perimeter (only if currently in office area)
+          const cur = prev[agent.name];
+          if (
+            cur &&
+            cur.x > OFFICE.x - 2 &&
+            cur.x < OFFICE.x + OFFICE.w + 2 &&
+            cur.y > OFFICE.y - 2 &&
+            cur.y < OFFICE.y + OFFICE.h + 2
+          ) {
+            next[agent.name] = randomPerimeterPos();
+          }
+        }
+      });
+      return next;
+    });
+  }, [activeAgents]);
+
+  /* Idle drift: perimeter agents shuffle slightly, office agents reposition within office */
   useEffect(() => {
     const id = setInterval(() => {
       setPositions((prev) => {
@@ -265,29 +368,36 @@ export default function VariedHQ() {
         const count = 3 + Math.floor(Math.random() * 3);
 
         shuffled.slice(0, count).forEach((agent) => {
-          const roll = Math.random();
-          let target: { x: number; y: number };
-
-          if (roll < 0.7) {
-            /* Stay in home room */
-            const room = getRoom(AGENT_HOME[agent.name] || "command");
-            target = room ? randomInRoom(room) : { x: 50, y: 50 };
-          } else if (roll < 0.9) {
-            /* Walk the corridor */
-            target = randomInRoom(CORRIDOR);
+          if (activeAgents.has(agent.name)) {
+            // Active agents shuffle within the office
+            next[agent.name] = randomOfficePos();
           } else {
-            /* Visit a random room */
-            const r = ROOMS[Math.floor(Math.random() * ROOMS.length)];
-            target = randomInRoom(r);
+            // Idle agents drift slightly along perimeter
+            const cur = prev[agent.name];
+            if (cur) {
+              next[agent.name] = {
+                x: cur.x + (Math.random() - 0.5) * 4,
+                y: cur.y + (Math.random() - 0.5) * 4,
+              };
+              // Clamp to keep on perimeter-ish area
+              next[agent.name].x = Math.max(
+                WORLD_PAD,
+                Math.min(100 - WORLD_PAD, next[agent.name].x)
+              );
+              next[agent.name].y = Math.max(
+                WORLD_PAD + 4,
+                Math.min(100 - WORLD_PAD - 4, next[agent.name].y)
+              );
+            }
           }
-
-          next[agent.name] = target;
         });
         return next;
       });
-    }, 2500);
+    }, 3000);
     return () => clearInterval(id);
-  }, []);
+  }, [activeAgents]);
+
+  const activeCount = activeAgents.size;
 
   return (
     <div>
@@ -301,16 +411,28 @@ export default function VariedHQ() {
         }}
       >
         <span className="t-label">The Varied HQ</span>
-        <Link
-          href="/agents"
-          style={{
-            fontSize: "var(--text-xs)",
-            color: "var(--text-muted)",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          Full Roster →
-        </Link>
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+          <span
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 9,
+              color: activeCount > 0 ? "#4ade80" : "var(--text-muted)",
+              letterSpacing: "0.05em",
+            }}
+          >
+            {activeCount} active
+          </span>
+          <Link
+            href="/agents"
+            style={{
+              fontSize: "var(--text-xs)",
+              color: "var(--text-muted)",
+              fontFamily: "var(--font-mono)",
+            }}
+          >
+            Full Roster →
+          </Link>
+        </div>
       </div>
 
       {/* Game world container */}
@@ -341,73 +463,167 @@ export default function VariedHQ() {
           }}
         />
 
-        {/* Rooms */}
-        {ROOMS.map((room) => (
-          <div
-            key={room.id}
-            style={{
-              position: "absolute",
-              left: `${room.x}%`,
-              top: `${room.y}%`,
-              width: `${room.w}%`,
-              height: `${room.h}%`,
-              border: "1px solid rgba(255,255,255,0.05)",
-              borderRadius: 2,
-              background: "rgba(255,255,255,0.012)",
-              zIndex: 0,
-            }}
-          >
-            <span
-              style={{
-                position: "absolute",
-                top: 4,
-                left: 6,
-                fontFamily: "var(--font-mono)",
-                fontSize: 8,
-                letterSpacing: "0.06em",
-                color: "rgba(255,255,255,0.12)",
-                fontWeight: 400,
-                userSelect: "none",
-                whiteSpace: "nowrap",
-                pointerEvents: "none",
-              }}
-            >
-              {room.icon} {room.label}
-            </span>
-          </div>
-        ))}
-
-        {/* Central corridor */}
+        {/* Perimeter zone — subtle border glow on walls */}
         <div
           style={{
             position: "absolute",
-            left: `${CORRIDOR.x}%`,
-            top: `${CORRIDOR.y}%`,
-            width: `${CORRIDOR.w}%`,
-            height: `${CORRIDOR.h}%`,
-            borderLeft: "1px dashed rgba(255,255,255,0.035)",
-            borderRight: "1px dashed rgba(255,255,255,0.035)",
-            background: "rgba(255,255,255,0.006)",
+            inset: 0,
+            boxShadow: "inset 0 0 30px rgba(255,255,255,0.015)",
+            pointerEvents: "none",
             zIndex: 0,
           }}
         />
 
-        {/* Furniture / decoration */}
-        <Desk x={46} y={10} />
-        <Desk x={48} y={14} />
-        <Server x={4} y={42} />
-        <Server x={8} y={42} />
-        <Server x={12} y={42} />
-        <Desk x={74} y={42} />
-        <Desk x={82} y={42} />
-        <Desk x={10} y={10} />
-        <Desk x={76} y={10} />
+        {/* Center OFFICE rectangle */}
+        <div
+          style={{
+            position: "absolute",
+            left: `${OFFICE.x}%`,
+            top: `${OFFICE.y}%`,
+            width: `${OFFICE.w}%`,
+            height: `${OFFICE.h}%`,
+            border: "1px solid rgba(255,255,255,0.06)",
+            borderRadius: 3,
+            background: "rgba(255,255,255,0.018)",
+            zIndex: 0,
+          }}
+        >
+          {/* Office floor pattern — denser grid */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage: `
+                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)
+              `,
+              backgroundSize: "12px 12px",
+              borderRadius: 3,
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* "THE FLOOR" label */}
+          <span
+            style={{
+              position: "absolute",
+              top: 6,
+              left: 10,
+              fontFamily: "var(--font-mono)",
+              fontSize: 8,
+              letterSpacing: "0.12em",
+              color: "rgba(255,255,255,0.1)",
+              fontWeight: 500,
+              userSelect: "none",
+              whiteSpace: "nowrap",
+              pointerEvents: "none",
+            }}
+          >
+            THE FLOOR
+          </span>
+
+          {/* Active count badge */}
+          <span
+            style={{
+              position: "absolute",
+              top: 6,
+              right: 10,
+              fontFamily: "var(--font-mono)",
+              fontSize: 7,
+              letterSpacing: "0.08em",
+              color: activeCount > 0 ? "rgba(74,222,128,0.3)" : "rgba(255,255,255,0.06)",
+              fontWeight: 400,
+              userSelect: "none",
+              pointerEvents: "none",
+            }}
+          >
+            {activeCount > 0 ? `${activeCount} WORKING` : "IDLE"}
+          </span>
+        </div>
+
+        {/* Corner labels for perimeter zones */}
+        <span
+          style={{
+            position: "absolute",
+            top: 6,
+            left: 8,
+            fontFamily: "var(--font-mono)",
+            fontSize: 7,
+            letterSpacing: "0.1em",
+            color: "rgba(255,255,255,0.06)",
+            userSelect: "none",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        >
+          STANDBY
+        </span>
+        <span
+          style={{
+            position: "absolute",
+            top: 6,
+            right: 8,
+            fontFamily: "var(--font-mono)",
+            fontSize: 7,
+            letterSpacing: "0.1em",
+            color: "rgba(255,255,255,0.06)",
+            userSelect: "none",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        >
+          STANDBY
+        </span>
+        <span
+          style={{
+            position: "absolute",
+            bottom: 6,
+            left: 8,
+            fontFamily: "var(--font-mono)",
+            fontSize: 7,
+            letterSpacing: "0.1em",
+            color: "rgba(255,255,255,0.06)",
+            userSelect: "none",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        >
+          STANDBY
+        </span>
+        <span
+          style={{
+            position: "absolute",
+            bottom: 6,
+            right: 8,
+            fontFamily: "var(--font-mono)",
+            fontSize: 7,
+            letterSpacing: "0.1em",
+            color: "rgba(255,255,255,0.06)",
+            userSelect: "none",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        >
+          STANDBY
+        </span>
+
+        {/* Furniture inside the office */}
+        <Desk x={35} y={35} />
+        <Desk x={42} y={35} />
+        <Desk x={55} y={35} />
+        <Desk x={62} y={35} />
+        <Desk x={35} y={55} />
+        <Desk x={55} y={55} />
+        <Server x={27} y={40} />
+        <Server x={27} y={50} />
+        <Server x={73} y={40} />
 
         {/* Agent sprites */}
         {AGENT_ROSTER.map((agent) => {
           const pos = positions[agent.name];
           if (!pos) return null;
           const isHovered = hovered === agent.name;
+          const isActive = activeAgents.has(agent.name);
           const isOpus = agent.tier === "opus";
 
           return (
@@ -433,7 +649,7 @@ export default function VariedHQ() {
                     bottom: "calc(100% + 6px)",
                     left: "50%",
                     transform: "translateX(-50%)",
-                    background: "rgba(0,0,0,0.9)",
+                    background: "rgba(0,0,0,0.92)",
                     border: `1px solid ${agent.color}40`,
                     borderRadius: 3,
                     padding: "4px 10px",
@@ -465,11 +681,11 @@ export default function VariedHQ() {
                     style={{
                       fontFamily: "var(--font-mono)",
                       fontSize: 7,
-                      color: "var(--text-tertiary)",
+                      color: isActive ? "#4ade80" : "var(--text-tertiary)",
                       marginTop: 2,
                     }}
                   >
-                    {agent.types.join(" · ")}
+                    {isActive ? "WORKING" : "STANDBY"} · {agent.types.join(" · ")}
                   </div>
                 </div>
               )}
@@ -478,6 +694,7 @@ export default function VariedHQ() {
                 agent={agent}
                 walkFrame={frame}
                 glow={isHovered || isOpus}
+                active={isActive}
               />
 
               {/* Name tag */}
@@ -485,7 +702,7 @@ export default function VariedHQ() {
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontSize: 7,
-                  color: `${agent.color}99`,
+                  color: isActive ? `${agent.color}cc` : `${agent.color}55`,
                   marginTop: 2,
                   textAlign: "center",
                   textShadow: "0 1px 3px rgba(0,0,0,0.9)",
@@ -500,16 +717,16 @@ export default function VariedHQ() {
           );
         })}
 
-        {/* "THE VARIED" watermark in corridor */}
+        {/* "THE VARIED" watermark */}
         <div
           style={{
             position: "absolute",
             left: "50%",
-            top: "55%",
+            top: "50%",
             transform: "translate(-50%, -50%)",
             fontFamily: "var(--font-serif)",
             fontSize: 14,
-            color: "rgba(255,255,255,0.04)",
+            color: "rgba(255,255,255,0.03)",
             letterSpacing: "0.2em",
             fontWeight: 400,
             whiteSpace: "nowrap",
