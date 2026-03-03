@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronRight } from "@/components/icons";
-import { AGENT_ROSTER } from "@/lib/agents";
+import VariedHQ from "@/components/VariedHQ";
 
 type HealthData = {
   ok: boolean;
@@ -198,58 +198,9 @@ export default function Dashboard() {
 
       <hr className="rule" style={{ margin: "var(--space-8) 0" }} />
 
-      {/* Agent avatars row */}
+      {/* The Varied HQ — game world view */}
       <div style={{ marginBottom: "var(--space-8)" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-4)" }}>
-          <span className="t-label">The Playwrights</span>
-          <Link href="/agents" style={{ display: "flex", alignItems: "center", gap: 2, fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
-            View All <ChevronRight size={10} />
-          </Link>
-        </div>
-        <div className="agents-avatar-row" style={{
-          display: "flex",
-          gap: "var(--space-2)",
-          overflowX: "auto",
-          paddingBottom: "var(--space-2)",
-        }}>
-          {AGENT_ROSTER.map((agent) => (
-            <Link
-              key={agent.name}
-              href="/agents"
-              title={`${agent.name} — ${agent.role}`}
-              className="agent-avatar-circle"
-              style={{
-                width: 40,
-                height: 40,
-                minWidth: 40,
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: agent.color,
-                color: "#09090B",
-                fontFamily: "var(--font-serif)",
-                fontSize: 16,
-                fontWeight: 400,
-                position: "relative",
-                transition: "transform 120ms ease, box-shadow 120ms ease",
-                textDecoration: "none",
-              }}
-            >
-              {agent.name[0]}
-              <span style={{
-                position: "absolute",
-                bottom: -1,
-                right: -1,
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                background: "#52525B",
-                border: "2px solid var(--bg)",
-              }} />
-            </Link>
-          ))}
-        </div>
+        <VariedHQ />
       </div>
 
       <hr className="rule" style={{ margin: "var(--space-8) 0" }} />

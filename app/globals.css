@@ -794,6 +794,11 @@ input[type="checkbox"] {
     display: none !important;
   }
 
+  /* HQ world: taller on mobile for more vertical space */
+  .hq-world {
+    padding-bottom: 75% !important;
+  }
+
   /* Pokemon cards: compact on mobile */
   .pokemon-card {
     min-height: 340px;
