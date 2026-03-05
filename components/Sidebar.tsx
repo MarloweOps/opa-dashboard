@@ -10,6 +10,7 @@ import {
   Users,
   Timer,
   Bot,
+  Play,
   X,
 } from "@/components/icons";
 
@@ -21,6 +22,7 @@ const NAV = [
   { href: "/crons", label: "Automations", Icon: Timer },
   { href: "/today", label: "Today", Icon: CheckSquare },
   { href: "/outreach", label: "Outreach", Icon: Users },
+  { href: "/content", label: "Content", Icon: Play },
 ];
 
 function isActive(pathname: string, href: string) {

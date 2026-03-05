@@ -14,6 +14,7 @@ const TITLES: Record<string, string> = {
   "/crons": "Automations",
   "/today": "Today",
   "/outreach": "Outreach",
+  "/content": "Content Hub",
   "/login": "Login",
 };
 
