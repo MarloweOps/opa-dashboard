@@ -11,12 +11,13 @@ const TRADES_FILE = path.join(TRADES_DIR, "wheel-trades.json");
 type Trade = {
   id: string;
   ticker: string;
-  strategy: "CSP" | "CC" | "Assignment" | "BTC" | "STC";
+  strategy: string;
+  side?: "SELL" | "BUY";
   strike: number;
   expiry: string;
   premium: number;
   contracts: number;
-  status: "Open" | "Assigned" | "Expired" | "Called Away" | "Closed" | "BTC";
+  status: "Open" | "Assigned" | "Expired" | "Called Away" | "Closed" | "BTC" | "Rolled";
   costBasis?: number;
   openedAt: string;
   closedAt?: string;
@@ -56,16 +57,19 @@ export async function POST(req: Request) {
     const trades = await ensureFile();
 
     const trade: Trade = {
-      id: randomUUID(),
+      id: body.id || randomUUID(),
       ticker: (body.ticker || "").toUpperCase(),
       strategy: body.strategy || "CSP",
+      side: body.side || "SELL",
       strike: Number(body.strike) || 0,
       expiry: body.expiry || "",
       premium: Number(body.premium) || 0,
       contracts: Number(body.contracts) || 1,
       status: body.status || "Open",
       costBasis: body.costBasis != null ? Number(body.costBasis) : undefined,
-      openedAt: new Date().toISOString(),
+      openedAt: body.openedAt || new Date().toISOString(),
+      closedAt: body.closedAt || undefined,
+      pnl: body.pnl != null ? Number(body.pnl) : undefined,
       wheelCycle: body.wheelCycle || undefined,
       notes: body.notes || undefined,
     };

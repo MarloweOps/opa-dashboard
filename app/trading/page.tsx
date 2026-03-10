@@ -8,12 +8,13 @@ import { ChevronDown, Plus, X } from "@/components/icons";
 type Trade = {
   id: string;
   ticker: string;
-  strategy: "CSP" | "CC" | "Assignment" | "BTC" | "STC";
+  strategy: string;
+  side?: "SELL" | "BUY";
   strike: number;
   expiry: string;
   premium: number;
   contracts: number;
-  status: "Open" | "Assigned" | "Expired" | "Called Away" | "Closed" | "BTC";
+  status: "Open" | "Assigned" | "Expired" | "Called Away" | "Closed" | "BTC" | "Rolled";
   costBasis?: number;
   openedAt: string;
   closedAt?: string;
@@ -27,9 +28,14 @@ type Trade = {
 const STRATEGY_COLORS: Record<string, { color: string; border: string; bg: string }> = {
   CSP: { color: "#F59E0B", border: "rgba(245,158,11,0.3)", bg: "rgba(245,158,11,0.08)" },
   CC: { color: "#22C55E", border: "rgba(34,197,94,0.3)", bg: "rgba(34,197,94,0.08)" },
+  "CC-LEAP": { color: "#10B981", border: "rgba(16,185,129,0.3)", bg: "rgba(16,185,129,0.08)" },
   Assignment: { color: "#3B82F6", border: "rgba(59,130,246,0.3)", bg: "rgba(59,130,246,0.08)" },
   BTC: { color: "#71717A", border: "rgba(113,113,122,0.3)", bg: "rgba(113,113,122,0.08)" },
   STC: { color: "#71717A", border: "rgba(113,113,122,0.3)", bg: "rgba(113,113,122,0.08)" },
+  PUT: { color: "#EF4444", border: "rgba(239,68,68,0.3)", bg: "rgba(239,68,68,0.08)" },
+  ROLL: { color: "#8B5CF6", border: "rgba(139,92,246,0.3)", bg: "rgba(139,92,246,0.08)" },
+  STOCK: { color: "#06B6D4", border: "rgba(6,182,212,0.3)", bg: "rgba(6,182,212,0.08)" },
+  DEPOSIT: { color: "#64748B", border: "rgba(100,116,139,0.3)", bg: "rgba(100,116,139,0.08)" },
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -39,6 +45,7 @@ const STATUS_COLORS: Record<string, string> = {
   "Called Away": "#F59E0B",
   Closed: "#71717A",
   BTC: "#71717A",
+  Rolled: "#8B5CF6",
 };
 
 function fmt$(n: number): string {
@@ -61,7 +68,7 @@ export default function TradingPage() {
 
   // Form state
   const [ticker, setTicker] = useState("");
-  const [strategy, setStrategy] = useState<Trade["strategy"]>("CSP");
+  const [strategy, setStrategy] = useState("CSP");
   const [strike, setStrike] = useState("");
   const [expiry, setExpiry] = useState("");
   const [premium, setPremium] = useState("");
@@ -84,7 +91,11 @@ export default function TradingPage() {
   const openTrades = trades.filter((t) => t.status === "Open" || t.status === "Assigned");
   const closedTrades = trades.filter((t) => t.status !== "Open" && t.status !== "Assigned");
 
-  const totalPremium = trades.reduce((sum, t) => sum + t.premium * t.contracts * 100, 0);
+  const totalPremium = trades.reduce((sum, t) => {
+    if (t.strategy === "DEPOSIT" || t.strategy === "STOCK") return sum;
+    const multiplier = t.side === "BUY" ? -1 : 1;
+    return sum + t.premium * t.contracts * 100 * multiplier;
+  }, 0);
   const realizedPnl = closedTrades.reduce((sum, t) => sum + (t.pnl || 0), 0);
   const winCount = closedTrades.filter((t) => (t.pnl || 0) >= 0).length;
   const winRate = closedTrades.length > 0 ? Math.round((winCount / closedTrades.length) * 100) : 0;
@@ -261,12 +272,16 @@ export default function TradingPage() {
             </div>
             <div>
               <label style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-xs)", color: "var(--text-muted)", display: "block", marginBottom: 4 }}>Strategy</label>
-              <select className="input" value={strategy} onChange={(e) => setStrategy(e.target.value as Trade["strategy"])} style={{ cursor: "pointer" }}>
+              <select className="input" value={strategy} onChange={(e) => setStrategy(e.target.value)} style={{ cursor: "pointer" }}>
                 <option value="CSP">CSP</option>
                 <option value="CC">CC</option>
+                <option value="CC-LEAP">CC-LEAP</option>
+                <option value="PUT">PUT</option>
                 <option value="Assignment">Assignment</option>
                 <option value="BTC">BTC</option>
                 <option value="STC">STC</option>
+                <option value="ROLL">ROLL</option>
+                <option value="STOCK">STOCK</option>
               </select>
             </div>
             <div>
@@ -336,7 +351,7 @@ export default function TradingPage() {
             {/* Rows */}
             {openTrades.map((trade, i) => {
               const dte = daysUntil(trade.expiry);
-              const premiumTotal = trade.premium * trade.contracts * 100;
+              const premiumTotal = trade.premium * trade.contracts * 100 * (trade.side === "BUY" ? -1 : 1);
               const isEven = i % 2 === 0;
               return (
                 <div key={trade.id} className="feed-item" style={{
@@ -357,7 +372,7 @@ export default function TradingPage() {
                   <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
                     {trade.expiry}
                   </span>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", color: "#22C55E" }}>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", color: premiumTotal >= 0 ? "#22C55E" : "var(--red)" }}>
                     {fmt$(premiumTotal)}
                   </span>
                   <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
@@ -426,7 +441,7 @@ export default function TradingPage() {
             </div>
 
             {closedTrades.map((trade, i) => {
-              const premiumTotal = trade.premium * trade.contracts * 100;
+              const premiumTotal = trade.premium * trade.contracts * 100 * (trade.side === "BUY" ? -1 : 1);
               const pnl = trade.pnl || 0;
               const isEven = i % 2 === 0;
               return (
