@@ -696,6 +696,16 @@ input[type="checkbox"] {
   }
 }
 
+  /* Trading summary 4-col -> 2 columns on mobile */
+  .grid-trading-summary {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Trading form 4-col -> 2 columns on mobile */
+  .trading-form-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
 /* Extra small screens */
 @media (max-width: 400px) {
   .main-content {
@@ -708,6 +718,10 @@ input[type="checkbox"] {
   }
 
   .grid-cron-status {
+    grid-template-columns: 1fr !important;
+  }
+
+  .grid-trading-summary {
     grid-template-columns: 1fr !important;
   }
 

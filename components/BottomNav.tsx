@@ -7,6 +7,7 @@ import {
   MessageSquare,
   Timer,
   CheckSquare,
+  TrendingUp,
 } from "@/components/icons";
 
 const TABS = [
@@ -15,6 +16,7 @@ const TABS = [
   { href: "/chat", label: "Chat", Icon: MessageSquare },
   { href: "/crons", label: "Auto", Icon: Timer },
   { href: "/today", label: "Today", Icon: CheckSquare },
+  { href: "/trading", label: "Trade", Icon: TrendingUp },
 ];
 
 function isActive(pathname: string, href: string) {

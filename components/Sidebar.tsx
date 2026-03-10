@@ -12,6 +12,7 @@ import {
   Bot,
   Play,
   X,
+  TrendingUp,
 } from "@/components/icons";
 
 const NAV = [
@@ -23,6 +24,7 @@ const NAV = [
   { href: "/today", label: "Today", Icon: CheckSquare },
   { href: "/outreach", label: "Outreach", Icon: Users },
   { href: "/content", label: "Content", Icon: Play },
+  { href: "/trading", label: "Trading", Icon: TrendingUp },
 ];
 
 function isActive(pathname: string, href: string) {
