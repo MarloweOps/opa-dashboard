@@ -1,37 +1,6 @@
-import { readFile, writeFile } from "fs/promises";
-import { existsSync } from "fs";
-import path from "path";
+import { loadTrades, saveTrades } from "@/lib/trades";
 
 export const dynamic = "force-dynamic";
-
-const TRADES_FILE = path.join(process.env.HOME || "", "life/trading/wheel-trades.json");
-
-type Trade = {
-  id: string;
-  ticker: string;
-  strategy: "CSP" | "CC" | "Assignment" | "BTC" | "STC";
-  strike: number;
-  expiry: string;
-  premium: number;
-  contracts: number;
-  status: "Open" | "Assigned" | "Expired" | "Called Away" | "Closed" | "BTC";
-  costBasis?: number;
-  openedAt: string;
-  closedAt?: string;
-  pnl?: number;
-  wheelCycle?: string;
-  notes?: string;
-};
-
-async function loadTrades(): Promise<Trade[]> {
-  if (!existsSync(TRADES_FILE)) return [];
-  const raw = await readFile(TRADES_FILE, "utf-8");
-  return JSON.parse(raw);
-}
-
-async function saveTrades(trades: Trade[]) {
-  await writeFile(TRADES_FILE, JSON.stringify(trades, null, 2), "utf-8");
-}
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
